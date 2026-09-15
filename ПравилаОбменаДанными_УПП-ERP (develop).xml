@@ -1,0 +1,4005 @@
+﻿<ПравилаОбмена>
+	<ВерсияФормата РежимСовместимости="РежимСовместимостиСБСП21">2.01</ВерсияФормата>
+	<Ид>47817497-72f3-428f-81a8-985281b909b1    </Ид>
+	<Наименование>УПП - ERP</Наименование>
+	<ДатаВремяСоздания>2026-09-04T11:24:35</ДатаВремяСоздания>
+	<Источник ВерсияПлатформы="8.0" ВерсияКонфигурации="1.3.274.2" СинонимКонфигурации="Управление производственным предприятием, редакция 1.3">УправлениеПроизводственнымПредприятием</Источник>
+	<Приемник ВерсияПлатформы="8.0" ВерсияКонфигурации="2.5.27.61/3.2.48.8" СинонимКонфигурации="1С:ERP Управление предприятием 2">УправлениеПредприятием</Приемник>
+	<ПередВыгрузкойДанных>Если Параметры.ДатаОстатков = Дата(1, 1, 1) Тогда
+	Параметры.ДатаОстатков = КонецДня(ТекущаяДатаСеанса()); 
+Иначе
+	Параметры.ДатаОстатков = КонецДня(Параметры.ДатаОстатков);	
+КонецЕсли; 
+
+СписокДопСведенийИРеквизитовКВыгрузке = Новый Массив;
+// Доп сведения Номенклатуры
+СписокДопСведенийИРеквизитовКВыгрузке.Добавить(ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000044")); // Вид товара
+СписокДопСведенийИРеквизитовКВыгрузке.Добавить(ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000038")); // Группа ГП
+СписокДопСведенийИРеквизитовКВыгрузке.Добавить(ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000043")); // Группа МП
+СписокДопСведенийИРеквизитовКВыгрузке.Добавить(ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000046")); // Диаметр
+СписокДопСведенийИРеквизитовКВыгрузке.Добавить(ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000039")); // Код в системе КАМАЗ
+СписокДопСведенийИРеквизитовКВыгрузке.Добавить(ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000078")); // Признак ГП
+СписокДопСведенийИРеквизитовКВыгрузке.Добавить(ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000047")); // Признак ТМЦ
+СписокДопСведенийИРеквизитовКВыгрузке.Добавить(ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000042")); // Тарная норма 
+СписокДопСведенийИРеквизитовКВыгрузке.Добавить(ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000052")); // Категория 
+
+Параметры.СписокДопСведенийИРеквизитовКВыгрузке = СписокДопСведенийИРеквизитовКВыгрузке;</ПередВыгрузкойДанных>
+	<ПередЗагрузкойДанных>СоответствиеВидовНоменклатуры = Новый Соответствие;
+СоответствиеВидовНоменклатуры.Вставить("Автозапчасти", 									"Товары");
+СоответствиеВидовНоменклатуры.Вставить("Активы стоимостью менее 40 тыс. рублей (10.14)","Активы стоимостью менее 40 тыс. рублей");
+СоответствиеВидовНоменклатуры.Вставить("без счета", 									"Оборудование (объекты основных средств)");
+СоответствиеВидовНоменклатуры.Вставить("Вспомогательные материалы (10.6.2)", 			"Вспомогательные материалы");
+СоответствиеВидовНоменклатуры.Вставить("Готовая Продукция (43)", 						"Готовая Продукция");
+СоответствиеВидовНоменклатуры.Вставить("Запасные части (10.5)", 						"Запасные части");
+СоответствиеВидовНоменклатуры.Вставить("Инструмент (10.9.2)", 							"Инструмент");
+СоответствиеВидовНоменклатуры.Вставить("Инструмент собственного произвоства (10.9.5)", 	"Инструмент собственного произвоства");
+СоответствиеВидовНоменклатуры.Вставить("Материалы", 									"Материалы");
+СоответствиеВидовНоменклатуры.Вставить("Материалы на ОКР (10.12)", 						"Материалы на ОКР");
+СоответствиеВидовНоменклатуры.Вставить("Металлолом (10.6.1)", 							"Металлолом");
+СоответствиеВидовНоменклатуры.Вставить("Нормы расхода на ВП", 							"Нормы расхода");
+СоответствиеВидовНоменклатуры.Вставить("Нормы расхода на Охрану труда", 				"Нормы расхода");
+СоответствиеВидовНоменклатуры.Вставить("Основное производство (20)", 					"Полуфабрикаты");
+СоответствиеВидовНоменклатуры.Вставить("Покупные полуфабрикаты и комплектующие (10.2)", "Покупные полуфабрикаты и комплектующие");
+СоответствиеВидовНоменклатуры.Вставить("Прочие хоз.принадлежности (10.9.3)", 			"Прочие хоз.принадлежности");
+СоответствиеВидовНоменклатуры.Вставить("РИМ", 											"Рекламно-информационные материалы");
+СоответствиеВидовНоменклатуры.Вставить("Спецодежда и спецобувь (10.10)", 				"Спецодежда и спецобувь");
+СоответствиеВидовНоменклатуры.Вставить("Строительные материалы (10.8)", 				"Строительные материалы");
+СоответствиеВидовНоменклатуры.Вставить("Сырье и материалы (10.1)", 						"Сырье и материалы");
+СоответствиеВидовНоменклатуры.Вставить("Тара и тарные материалы (10.4)", 				"Тара и тарные материалы");
+СоответствиеВидовНоменклатуры.Вставить("Товарно-материальные ценности, принятые  (002)","Товарно-материальные ценности, принятые");
+СоответствиеВидовНоменклатуры.Вставить("Товары (41.1.3)", 								"Товары");
+СоответствиеВидовНоменклатуры.Вставить("Топливо (10.3)", 								"Топливо");
+СоответствиеВидовНоменклатуры.Вставить("Услуга", 										"Услуги");
+СоответствиеВидовНоменклатуры.Вставить("Тара", 											"Тара и тарные материалы");
+
+Параметры.Вставить("СоответствиеВидовНоменклатуры", СоответствиеВидовНоменклатуры);
+
+Если Не Константы.ИспользоватьДополнительныеРеквизитыИСведения.Получить() Тогда
+	Константы.ИспользоватьДополнительныеРеквизитыИСведения.Установить(Истина); 
+КонецЕсли;</ПередЗагрузкойДанных>
+	<Параметры>
+		<Параметр Имя="ДатаОстатков                                      " Наименование="ДатаОстатков" ИспользуетсяПриЗагрузке="true" УстанавливатьВДиалоге="true" ТипЗначения="Дата" ПередаватьПараметрПриВыгрузке="true"/>
+		<Параметр Имя="СписокДопСведенийИРеквизитовКВыгрузке             " Наименование="СписокДопСведенийИРеквизитовКВыгрузке" ИспользуетсяПриЗагрузке="true" УстанавливатьВДиалоге="true" ПередаватьПараметрПриВыгрузке="true"/>
+	</Параметры>
+	<Обработки>
+		<Обработка Имя="Макеты                                            " Наименование="Макеты" Параметры="" Комментарий="" ИспользуетсяПриВыгрузке="true" ИспользуетсяПриЗагрузке="false" ЭтоОбработкаНастройки="false">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
+gD2vrwjFVJ/WWsJaltzxMNn5P8Gy/wY=</Обработка>
+	</Обработки>
+	<ПравилаКонвертацииОбъектов>
+		<Группа>
+			<Код>Справочники</Код>
+			<Наименование>Справочники</Наименование>
+			<Порядок>50</Порядок>
+			<Правило>
+				<Код>Организации</Код>
+				<Наименование>Справочник: Организации</Наименование>
+				<Порядок>50</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<Источник>СправочникСсылка.Организации</Источник>
+				<Приемник>СправочникСсылка.Организации</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>ДатаРегистрации --&gt; ДатаРегистрации</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="ДатаРегистрации" Вид="Реквизит" Тип="Дата"/>
+						<Приемник Имя="ДатаРегистрации" Вид="Реквизит" Тип="Дата"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ИНН --&gt; ИНН</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="ИНН" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="ИНН" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>КодОКВЭД --&gt; КодОКВЭД</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="КодОКВЭД" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КодОКВЭД" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>5</Код>
+						<Наименование>КодОКВЭД2 --&gt; КодОКВЭД2</Наименование>
+						<Порядок>250</Порядок>
+						<Источник Имя="КодОКВЭД2" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КодОКВЭД2" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>6</Код>
+						<Наименование>КодОКОПФ --&gt; КодОКОПФ</Наименование>
+						<Порядок>300</Порядок>
+						<Источник Имя="КодОКОПФ" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КодОКОПФ" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>7</Код>
+						<Наименование>КодОКФС --&gt; КодОКФС</Наименование>
+						<Порядок>350</Порядок>
+						<Источник Имя="КодОКФС" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КодОКФС" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>8</Код>
+						<Наименование>КодПоОКАТО --&gt; КодПоОКАТО</Наименование>
+						<Порядок>400</Порядок>
+						<Источник Имя="КодПоОКАТО" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КодПоОКАТО" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>9</Код>
+						<Наименование>КодПоОКПО --&gt; КодПоОКПО</Наименование>
+						<Порядок>450</Порядок>
+						<Источник Имя="КодПоОКПО" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КодПоОКПО" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>10</Код>
+						<Наименование>КПП --&gt; КПП</Наименование>
+						<Порядок>500</Порядок>
+						<Источник Имя="КПП" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КПП" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>11</Код>
+						<Наименование>НаименованиеПолное --&gt; НаименованиеПолное</Наименование>
+						<Порядок>550</Порядок>
+						<Источник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>12</Код>
+						<Наименование>ОГРН --&gt; ОГРН</Наименование>
+						<Порядок>600</Порядок>
+						<Источник Имя="ОГРН" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="ОГРН" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>13</Код>
+						<Наименование>ОсновнойБанковскийСчет --&gt; ОсновнойБанковскийСчет</Наименование>
+						<Порядок>650</Порядок>
+						<Источник Имя="ОсновнойБанковскийСчет" Вид="Реквизит" Тип="СправочникСсылка.БанковскиеСчета"/>
+						<Приемник Имя="ОсновнойБанковскийСчет" Вид="Реквизит" Тип="СправочникСсылка.БанковскиеСчетаОрганизаций"/>
+					</Свойство>
+					<Свойство>
+						<Код>14</Код>
+						<Наименование>Префикс --&gt; Префикс</Наименование>
+						<Порядок>700</Порядок>
+						<Источник Имя="Префикс" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="Префикс" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>15</Код>
+						<Наименование>ЮрФизЛицо --&gt; ЮрФизЛицо</Наименование>
+						<Порядок>750</Порядок>
+						<Источник Имя="ЮрФизЛицо" Вид="Реквизит" Тип="ПеречислениеСсылка.ЮрФизЛицо"/>
+						<Приемник Имя="ЮрФизЛицо" Вид="Реквизит" Тип="ПеречислениеСсылка.ЮрФизЛицо"/>
+						<КодПравилаКонвертации>ЮрФизЛицо                                         </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>16</Код>
+						<Наименование>НаименованиеИМНС --&gt; НаименованиеРегистрирующегоОргана</Наименование>
+						<Порядок>800</Порядок>
+						<Источник Имя="НаименованиеИМНС" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="НаименованиеРегистрирующегоОргана" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>БанковскиеСчетаОрганизаций</Код>
+				<Наименование>Справочник: Банковские счета</Наименование>
+				<Порядок>100</Порядок>
+				<ПослеЗагрузки>
+ПараметрыОбъектаТипСчета = ПараметрыОбъекта.Получить("ТипСчета");
+
+Если ПараметрыОбъектаТипСчета = "Депозитный" Тогда
+	Объект.ТипСчета = Перечисления.ТипыБанковскихСчетов.Депозитный;
+ИначеЕсли ПараметрыОбъектаТипСчета = "Расчетный" Тогда
+	Объект.ТипСчета = Перечисления.ТипыБанковскихСчетов.Расчетный;
+ИначеЕсли ПараметрыОбъектаТипСчета = "Иной" Тогда
+	Объект.ТипСчета = Перечисления.ТипыБанковскихСчетов.Прочий;
+КонецЕсли;</ПослеЗагрузки>
+				<НеЗапоминатьВыгруженные>true</НеЗапоминатьВыгруженные>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.БанковскиеСчета</Источник>
+				<Приемник>СправочникСсылка.БанковскиеСчетаОрганизаций</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>Владелец --&gt; Владелец</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Владелец" Вид="Свойство"/>
+						<Приемник Имя="Владелец" Вид="Свойство" Тип="СправочникСсылка.Организации"/>
+					</Свойство>
+					<Свойство Отключить="true" Обязательное="true">
+						<Код>2</Код>
+						<Наименование>--&gt; ЭтоГруппа</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>3</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>Банк --&gt; Банк</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="Банк" Вид="Реквизит" Тип="СправочникСсылка.Банки"/>
+						<Приемник Имя="Банк" Вид="Реквизит" Тип="СправочникСсылка.КлассификаторБанков"/>
+						<КодПравилаКонвертации>КлассификаторБанков                               </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>5</Код>
+						<Наименование>ВалютаДенежныхСредств --&gt; ВалютаДенежныхСредств</Наименование>
+						<Порядок>250</Порядок>
+						<Источник Имя="ВалютаДенежныхСредств" Вид="Реквизит" Тип="СправочникСсылка.Валюты"/>
+						<Приемник Имя="ВалютаДенежныхСредств" Вид="Реквизит" Тип="СправочникСсылка.Валюты"/>
+						<КодПравилаКонвертации>Валюты                                            </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>6</Код>
+						<Наименование>НомерСчета --&gt; НомерСчета</Наименование>
+						<Порядок>300</Порядок>
+						<Источник Имя="НомерСчета" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="НомерСчета" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>7</Код>
+						<Наименование>ВидСчета --&gt; ТипСчета</Наименование>
+						<Порядок>350</Порядок>
+						<Источник Имя="ВидСчета" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="" Вид=""/>
+						<ИмяПараметраДляПередачи>ТипСчета</ИмяПараметраДляПередачи>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>Валюты</Код>
+				<Наименование>Справочник: Валюты</Наименование>
+				<Порядок>150</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<НеСоздаватьЕслиНеНайден>true</НеСоздаватьЕслиНеНайден>
+				<ПриПереносеОбъектаПоСсылкеУстанавливатьТолькоGIUD>true</ПриПереносеОбъектаПоСсылкеУстанавливатьТолькоGIUD>
+				<Источник>СправочникСсылка.Валюты</Источник>
+				<Приемник>СправочникСсылка.Валюты</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>2</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>3</Код>
+						<Наименование>НаименованиеПолное --&gt; НаименованиеПолное</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>4</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>НаборыДополнительныхРеквизитовИСведений</Код>
+				<Наименование>:</Наименование>
+				<Порядок>150</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Приемник>СправочникСсылка.НаборыДополнительныхРеквизитовИСведений</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>--&gt; Наименование</Наименование>
+						<Порядок>50</Порядок>
+						<ПолучитьИзВходящихДанных>true</ПолучитьИзВходящихДанных>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>--&gt; Родитель</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.НаборыДополнительныхРеквизитовИСведений"/>
+						<КодПравилаКонвертации>НаборыДополнительныхРеквизитовИСведений           </КодПравилаКонвертации>
+						<ПередВыгрузкой>Если ВходящиеДанные.Свойство("Родитель") Тогда
+	ИсходящиеДанные = Новый Структура;
+	ИсходящиеДанные.Вставить("Наименование", ВходящиеДанные.Родитель);
+	ИсходящиеДанные.Вставить("Родитель", "");
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>КлассификаторБанков</Код>
+				<Наименование>Справочник: Банки</Наименование>
+				<Порядок>200</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.Банки</Источник>
+				<Приемник>СправочникСсылка.КлассификаторБанков</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>КоррСчет --&gt; КоррСчет</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="КоррСчет" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КоррСчет" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>МеждународноеНаименование --&gt; МеждународноеНаименование</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="МеждународноеНаименование" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="МеждународноеНаименование" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>СВИФТБИК --&gt; СВИФТБИК</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="СВИФТБИК" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="СВИФТБИК" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>5</Код>
+						<Наименование>Адрес --&gt; Адрес</Наименование>
+						<Порядок>250</Порядок>
+						<Источник Имя="Адрес" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="Адрес" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>6</Код>
+						<Наименование>АдресМеждународный --&gt; АдресМеждународный</Наименование>
+						<Порядок>300</Порядок>
+						<Источник Имя="АдресМеждународный" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="АдресМеждународный" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>7</Код>
+						<Наименование>Город --&gt; Город</Наименование>
+						<Порядок>350</Порядок>
+						<Источник Имя="Город" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="Город" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>8</Код>
+						<Наименование>ГородМеждународный --&gt; ГородМеждународный</Наименование>
+						<Порядок>400</Порядок>
+						<Источник Имя="ГородМеждународный" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="ГородМеждународный" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>9</Код>
+						<Наименование>ИНН --&gt; ИНН</Наименование>
+						<Порядок>450</Порядок>
+						<Источник Имя="ИНН" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="ИНН" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>10</Код>
+						<Наименование>Телефоны --&gt; Телефоны</Наименование>
+						<Порядок>500</Порядок>
+						<Источник Имя="Телефоны" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="Телефоны" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>11</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Порядок>550</Порядок>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ОтветственныеЛицаОрганизаций</Код>
+				<Наименование>Регистр сведений: Ответственные лица организаций</Наименование>
+				<Порядок>250</Порядок>
+				<НеЗапоминатьВыгруженные>true</НеЗапоминатьВыгруженные>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>РегистрСведенийЗапись.ОтветственныеЛицаОрганизаций</Источник>
+				<Приемник>СправочникСсылка.ОтветственныеЛицаОрганизаций</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>СтруктурнаяЕдиница --&gt; Владелец</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="СтруктурнаяЕдиница" Вид="Измерение"/>
+						<Приемник Имя="Владелец" Вид="Свойство" Тип="СправочникСсылка.Организации"/>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>2</Код>
+						<Наименование>--&gt; Наименование</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ОтветственноеЛицо --&gt; ОтветственноеЛицо</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="ОтветственноеЛицо" Вид="Измерение" Тип="ПеречислениеСсылка.ОтветственныеЛицаОрганизаций"/>
+						<Приемник Имя="ОтветственноеЛицо" Вид="Реквизит" Тип="ПеречислениеСсылка.ОтветственныеЛицаОрганизаций"/>
+						<КодПравилаКонвертации>ОтветственныеЛицаОрганизаций00001                 </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>4</Код>
+						<Наименование>ФизическоеЛицо --&gt; ФизическоеЛицо</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="ФизическоеЛицо" Вид="Ресурс" Тип="СправочникСсылка.ФизическиеЛица"/>
+						<Приемник Имя="ФизическоеЛицо" Вид="Реквизит" Тип="СправочникСсылка.ФизическиеЛица"/>
+						<КодПравилаКонвертации>ФизическиеЛица                                    </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>5</Код>
+						<Наименование>Должность --&gt; ДолжностьСсылка</Наименование>
+						<Порядок>250</Порядок>
+						<Источник Имя="Должность" Вид="Ресурс" Тип="СправочникСсылка.ДолжностиОрганизаций"/>
+						<Приемник Имя="ДолжностьСсылка" Вид="Реквизит" Тип="СправочникСсылка.Должности"/>
+						<КодПравилаКонвертации>Должности                                         </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>6</Код>
+						<Наименование>Приказ --&gt; ДокументПраваПодписи</Наименование>
+						<Порядок>300</Порядок>
+						<Источник Имя="Приказ" Вид="Ресурс" Тип="Строка"/>
+						<Приемник Имя="ДокументПраваПодписи" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>7</Код>
+						<Наименование>Период --&gt; ДатаНачала</Наименование>
+						<Порядок>350</Порядок>
+						<Источник Имя="Период" Вид="Свойство" Тип="Дата"/>
+						<Приемник Имя="ДатаНачала" Вид="Реквизит" Тип="Дата"/>
+					</Свойство>
+					<Свойство>
+						<Код>8</Код>
+						<Наименование>--&gt; Должность</Наименование>
+						<Порядок>400</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Должность" Вид="Реквизит" Тип="Строка"/>
+						<ПередВыгрузкой>ДолжностьНаименование = 
+	ОбщегоНазначения.ЗначениеРеквизитаОбъекта(
+	Источник.Должность, "Наименование");
+
+Значение = ДолжностьНаименование;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>9</Код>
+						<Наименование>--&gt; Наименование</Наименование>
+						<Порядок>450</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<ПередВыгрузкой>Значение = ОбщегоНазначения.ЗначениеРеквизитаОбъекта(
+	Источник.ФизическоеЛицо, "Наименование");</ПередВыгрузкой>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ФизическиеЛица</Код>
+				<Наименование>Справочник: Физические лица</Наименование>
+				<Порядок>300</Порядок>
+				<ПередВыгрузкой>Выполнить(Алгоритмы.ВыгрузкаДопРеквизитовИСведений); 
+
+
+ТабличнаяЧасть = Новый ТаблицаЗначений;
+ТабличнаяЧасть.Колонки.Добавить("Свойство");
+ТабличнаяЧасть.Колонки.Добавить("Значение");
+
+Если ВходящиеДанные &lt;&gt; Неопределено И ВходящиеДанные.Свойство("ДопСвойства") Тогда
+	
+	Для каждого Элемент Из ВходящиеДанные.ДопСвойства Цикл
+		
+		НоваяСтрока = ТабличнаяЧасть.Добавить();
+		НоваяСтрока.Свойство = Элемент.Ключ;
+		НоваяСтрока.Значение = Элемент.Значение;
+		
+	КонецЦикла;
+	
+КонецЕсли;
+
+Если ВходящиеДанные = Неопределено Тогда
+	ВходящиеДанные = Новый Структура;
+КонецЕсли;
+
+ВходящиеДанные.Вставить("ДополнительныеРеквизиты", ТабличнаяЧасть);</ПередВыгрузкой>
+				<ПоследовательностьПолейПоиска>Если НомерВариантаПоиска = 1 Тогда
+ 
+ СтрокаИменСвойствПоиска = "ЭтоГруппа, ИНН, Наименование";
+ 
+ИначеЕсли НомерВариантаПоиска = 2 Тогда
+ 
+ СтрокаИменСвойствПоиска = "ЭтоГруппа, Наименование";
+	
+КонецЕсли;</ПоследовательностьПолейПоиска>
+				<НеЗапоминатьВыгруженные>true</НеЗапоминатьВыгруженные>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.ФизическиеЛица</Источник>
+				<Приемник>СправочникСсылка.ФизическиеЛица</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>ДатаРождения --&gt; ДатаРождения</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="ДатаРождения" Вид="Реквизит" Тип="Дата"/>
+						<Приемник Имя="ДатаРождения" Вид="Реквизит" Тип="Дата"/>
+						<ПередВыгрузкой>Если НЕ ЗначениеЗаполнено(Источник.ДатаРождения) Тогда
+	Отказ = Истина;
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>ИмеетИзобретения --&gt; ИмеетИзобретения</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="ИмеетИзобретения" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="ИмеетИзобретения" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ИмеетНаучныеТруды --&gt; ИмеетНаучныеТруды</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="ИмеетНаучныеТруды" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="ИмеетНаучныеТруды" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>4</Код>
+						<Наименование>ИНН --&gt; ИНН</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="ИНН" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="ИНН" Вид="Реквизит" Тип="Строка"/>
+						<ПередВыгрузкой>Если НЕ ЗначениеЗаполнено(Источник.ИНН) ИЛИ Источник.ЭтоГруппа Тогда
+	Отказ = Истина;
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>5</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Порядок>250</Порядок>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>6</Код>
+						<Наименование>ЛьготаПриНачисленииПособий --&gt; ЛьготаПриНачисленииПособий</Наименование>
+						<Порядок>300</Порядок>
+						<Источник Имя="ЛьготаПриНачисленииПособий" Вид="Реквизит" Тип="ПеречислениеСсылка.ВидыЛьготПриНачисленииБольничных"/>
+						<Приемник Имя="ЛьготаПриНачисленииПособий" Вид="Реквизит" Тип="ПеречислениеСсылка.ОснованияФинансированияПособияФедеральнымБюджетом"/>
+					</Свойство>
+					<Свойство>
+						<Код>7</Код>
+						<Наименование>МестоРождения --&gt; МестоРождения</Наименование>
+						<Порядок>350</Порядок>
+						<Источник Имя="МестоРождения" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="МестоРождения" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>8</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>400</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>9</Код>
+						<Наименование>Пол --&gt; Пол</Наименование>
+						<Порядок>450</Порядок>
+						<Источник Имя="Пол" Вид="Реквизит" Тип="ПеречислениеСсылка.ПолФизическихЛиц"/>
+						<Приемник Имя="Пол" Вид="Реквизит" Тип="ПеречислениеСсылка.ПолФизическогоЛица"/>
+					</Свойство>
+					<Свойство>
+						<Код>10</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Порядок>500</Порядок>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>11</Код>
+						<Наименование>ПостоянноПроживалВКрыму18Марта2014Года --&gt; ПостоянноПроживалВКрыму18Марта2014Года</Наименование>
+						<Порядок>550</Порядок>
+						<Источник Имя="ПостоянноПроживалВКрыму18Марта2014Года" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="ПостоянноПроживалВКрыму18Марта2014Года" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>12</Код>
+						<Наименование>Родитель --&gt; Родитель</Наименование>
+						<Порядок>600</Порядок>
+						<Источник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.ФизическиеЛица"/>
+						<Приемник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.ФизическиеЛица"/>
+						<КодПравилаКонвертации>ФизическиеЛица                                    </КодПравилаКонвертации>
+						<ПередВыгрузкой>Если Источник.Родитель.Наименование &lt;&gt; "Водители" Тогда
+	Отказ = Истина;
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>13</Код>
+						<Наименование>СтраховойНомерПФР --&gt; СтраховойНомерПФР</Наименование>
+						<Порядок>650</Порядок>
+						<Источник Имя="СтраховойНомерПФР" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="СтраховойНомерПФР" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство Поиск="true" Обязательное="true">
+						<Код>14</Код>
+						<Наименование>ЭтоГруппа --&gt; ЭтоГруппа</Наименование>
+						<Порядок>700</Порядок>
+						<Источник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>15</Код>
+						<Наименование>Наименование --&gt; ФИО</Наименование>
+						<Порядок>750</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="ФИО" Вид="Реквизит" Тип="Строка"/>
+						<ПередВыгрузкой>Если Источник.ЭтоГруппа Тогда
+	Отказ = Истина;
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Группа>
+						<Код>16</Код>
+						<Наименование>--&gt; ДополнительныеРеквизиты</Наименование>
+						<Порядок>800</Порядок>
+						<ПолучитьИзВходящихДанных>true</ПолучитьИзВходящихДанных>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="ДополнительныеРеквизиты" Вид="ТабличнаяЧасть"/>
+						<Свойство>
+							<Код>17</Код>
+							<Наименование>--&gt; Значение</Наименование>
+							<Порядок>50</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="Значение" Вид="Реквизит"/>
+						</Свойство>
+						<Свойство>
+							<Код>18</Код>
+							<Наименование>--&gt; Свойство</Наименование>
+							<Порядок>100</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="Свойство" Вид="Реквизит" Тип="ПланВидовХарактеристикСсылка.ДополнительныеРеквизитыИСведения"/>
+							<КодПравилаКонвертации>ДополнительныеРеквизитыИСведения                  </КодПравилаКонвертации>
+							<ПередВыгрузкой>ИсходящиеДанные = Новый Структура;
+
+ИсходящиеДанные.Вставить("НаименованиеНабора", "Физические лица");
+ИсходящиеДанные.Вставить("РодительНабора", "");
+ИсходящиеДанные.Вставить("ЭтоДополнительноеСведение", Ложь);</ПередВыгрузкой>
+						</Свойство>
+						<Свойство Отключить="true">
+							<Код>19</Код>
+							<Наименование>--&gt; ТекстоваяСтрока</Наименование>
+							<Порядок>150</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="ТекстоваяСтрока" Вид="Реквизит" Тип="Строка"/>
+						</Свойство>
+					</Группа>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>Должности</Код>
+				<Наименование>Справочник: Должности организаций</Наименование>
+				<Порядок>350</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.ДолжностиОрганизаций</Источник>
+				<Приемник>СправочникСсылка.Должности</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>Склады</Код>
+				<Наименование>Справочник: Склады (места хранения)</Наименование>
+				<Порядок>400</Порядок>
+				<ПередВыгрузкой>
+Если Источник.ЭтоГруппа Тогда
+	Отказ = Истина;
+КонецЕсли;
+
+Если Источник.Родитель.Родитель.Наименование = "16 ВП" 
+	ИЛИ Источник.Родитель.Родитель.Наименование = "Склады 15 счета" Тогда
+	Отказ = Истина;
+КонецЕсли;</ПередВыгрузкой>
+				<НеЗапоминатьВыгруженные>true</НеЗапоминатьВыгруженные>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<Источник>СправочникСсылка.Склады</Источник>
+				<Приемник>СправочникСсылка.Склады</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>Подразделение --&gt; Подразделение</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Подразделение" Вид="Реквизит" Тип="СправочникСсылка.Подразделения"/>
+						<Приемник Имя="Подразделение" Вид="Реквизит" Тип="СправочникСсылка.СтруктураПредприятия"/>
+						<КодПравилаКонвертации>СтруктураПредприятия                              </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>Родитель --&gt; Родитель</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.Склады"/>
+						<Приемник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.Склады"/>
+						<КодПравилаКонвертации>СкладыГруппа                                      </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство Поиск="true" Обязательное="true">
+						<Код>5</Код>
+						<Наименование>ЭтоГруппа --&gt; ЭтоГруппа</Наименование>
+						<Порядок>250</Порядок>
+						<Источник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>6</Код>
+						<Наименование>ВидСклада --&gt; ТипСклада</Наименование>
+						<Порядок>300</Порядок>
+						<Источник Имя="ВидСклада" Вид="Реквизит" Тип="ПеречислениеСсылка.ВидыСкладов"/>
+						<Приемник Имя="ТипСклада" Вид="Реквизит" Тип="ПеречислениеСсылка.ТипыСкладов"/>
+						<КодПравилаКонвертации>ТипыСкладов                                       </КодПравилаКонвертации>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>СкладыГруппа</Код>
+				<Наименование>Справочник: Склады (места хранения)</Наименование>
+				<Порядок>450</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<Источник>СправочникСсылка.Склады</Источник>
+				<Приемник>СправочникСсылка.Склады</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>Родитель --&gt; Родитель</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.Склады"/>
+						<Приемник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.Склады"/>
+					</Свойство>
+					<Свойство Поиск="true" Обязательное="true">
+						<Код>3</Код>
+						<Наименование>ЭтоГруппа --&gt; ЭтоГруппа</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>СтруктураПредприятия</Код>
+				<Наименование>Справочник: Подразделения</Наименование>
+				<Порядок>500</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<НеСоздаватьЕслиНеНайден>true</НеСоздаватьЕслиНеНайден>
+				<Источник>СправочникСсылка.Подразделения</Источник>
+				<Приемник>СправочникСсылка.СтруктураПредприятия</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>Родитель --&gt; Родитель</Наименование>
+						<Источник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.Подразделения"/>
+						<Приемник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.СтруктураПредприятия"/>
+						<КодПравилаКонвертации>СтруктураПредприятия                              </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ГруппыАналитическогоУчетаНоменклатуры</Код>
+				<Наименование>Справочник: Номенклатурные группы</Наименование>
+				<Порядок>550</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.НоменклатурныеГруппы</Источник>
+				<Приемник>СправочникСсылка.ГруппыАналитическогоУчетаНоменклатуры</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>Родитель --&gt; Родитель</Наименование>
+						<Источник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.НоменклатурныеГруппы"/>
+						<Приемник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.ГруппыАналитическогоУчетаНоменклатуры"/>
+						<КодПравилаКонвертации>ГруппыАналитическогоУчетаНоменклатуры             </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство Поиск="true" Обязательное="true">
+						<Код>4</Код>
+						<Наименование>ЭтоГруппа --&gt; ЭтоГруппа</Наименование>
+						<Источник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>НаборыУпаковок</Код>
+				<Наименование>:</Наименование>
+				<Порядок>600</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Приемник>СправочникСсылка.НаборыУпаковок</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>--&gt; Наименование</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<ПередВыгрузкой>Значение = "Базовые единицы измерения";</ПередВыгрузкой>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>КлассификаторЕдиницИзмерения</Код>
+				<Наименование>Справочник: Классификатор единиц измерения</Наименование>
+				<Порядок>650</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.КлассификаторЕдиницИзмерения</Источник>
+				<Приемник>СправочникСсылка.УпаковкиЕдиницыИзмерения</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>--&gt; Владелец</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Владелец" Вид="Свойство"/>
+						<КодПравилаКонвертации>НаборыУпаковок                                    </КодПравилаКонвертации>
+						<ПередВыгрузкой>Значение = "БазовыеЕдиницыИзмерения";</ПередВыгрузкой>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ВидыАлкогольнойПродукции</Код>
+				<Наименование>Справочник: Виды алкогольной и спиртосодержащей продукции</Наименование>
+				<Порядок>700</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.ВидыАлкогольнойПродукции</Источник>
+				<Приемник>СправочникСсылка.ВидыАлкогольнойПродукции</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>ВидЛицензии --&gt; ВидЛицензии</Наименование>
+						<Источник Имя="ВидЛицензии" Вид="Реквизит" Тип="ПеречислениеСсылка.ВидыЛицензийАлкогольнойПродукции"/>
+						<Приемник Имя="ВидЛицензии" Вид="Реквизит" Тип="ПеречислениеСсылка.ВидыЛицензийАлкогольнойПродукции"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>ВидПодакцизногоТовара --&gt; ВидПодакцизногоТовара</Наименование>
+						<Источник Имя="ВидПодакцизногоТовара" Вид="Реквизит" Тип="ПеречислениеСсылка.ВидыПодакцизныхТоваровИС"/>
+						<Приемник Имя="ВидПодакцизногоТовара" Вид="Реквизит" Тип="ПеречислениеСсылка.ВидыПодакцизныхТоваровИС"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>Маркируемый --&gt; Маркируемый</Наименование>
+						<Источник Имя="Маркируемый" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="Маркируемый" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>5</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>6</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>bit_ГруппаТМЦ</Код>
+				<Наименование>Справочник: Группы ТМЦ</Наименование>
+				<Порядок>750</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка._ГруппыТМЦ</Источник>
+				<Приемник>СправочникСсылка.bit_ГруппаТМЦ</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>УпаковкиЕдиницыИзмерения</Код>
+				<Наименование>Справочник: Единицы измерения</Наименование>
+				<Порядок>800</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.ЕдиницыИзмерения</Источник>
+				<Приемник>СправочникСсылка.УпаковкиЕдиницыИзмерения</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>9</Код>
+						<Наименование>--&gt; Знаменатель</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Знаменатель" Вид="Реквизит" Тип="Число"/>
+						<ПередВыгрузкой>Значение = 1;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>Вес --&gt; Вес</Наименование>
+						<Источник Имя="Вес" Вид="Реквизит" Тип="Число"/>
+						<Приемник Имя="Вес" Вид="Реквизит" Тип="Число"/>
+					</Свойство>
+					<Свойство>
+						<Код>7</Код>
+						<Наименование>ЕдиницаПоКлассификатору --&gt; ЕдиницаИзмерения</Наименование>
+						<Источник Имя="ЕдиницаПоКлассификатору" Вид="Реквизит" Тип="СправочникСсылка.КлассификаторЕдиницИзмерения"/>
+						<Приемник Имя="ЕдиницаИзмерения" Вид="Реквизит" Тип="СправочникСсылка.УпаковкиЕдиницыИзмерения"/>
+						<КодПравилаКонвертации>КлассификаторЕдиницИзмерения                      </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<ПриводитьКДлине>4</ПриводитьКДлине>
+					</Свойство>
+					<Свойство>
+						<Код>8</Код>
+						<Наименование>Коэффициент --&gt; Числитель</Наименование>
+						<Источник Имя="Коэффициент" Вид="Реквизит" Тип="Число"/>
+						<Приемник Имя="Числитель" Вид="Реквизит" Тип="Число"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>5</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>Объем --&gt; Объем</Наименование>
+						<Источник Имя="Объем" Вид="Реквизит" Тип="Число"/>
+						<Приемник Имя="Объем" Вид="Реквизит" Тип="Число"/>
+					</Свойство>
+					<Свойство>
+						<Код>6</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>3</Код>
+						<Наименование>--&gt; Владелец</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Владелец" Вид="Свойство"/>
+						<КодПравилаКонвертации>НаборыУпаковок                                    </КодПравилаКонвертации>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>КлассификаторТНВЭД</Код>
+				<Наименование>Справочник: Классификатор ТН ВЭД</Наименование>
+				<Порядок>850</Порядок>
+				<ПослеЗагрузки>Если ОбъектНайден Тогда
+	ЕдИзм = ОбщегоНазначения.ЗначениеРеквизитаОбъекта(Объект.Ссылка, "ЕдиницаИзмерения");
+	Если ЗначениеЗаполнено(ЕдИзм) Тогда
+		Объект.ЕдиницаИзмерения = ЕдИзм;	
+	КонецЕсли;
+КонецЕсли;</ПослеЗагрузки>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.КлассификаторТНВЭД</Источник>
+				<Приемник>СправочникСсылка.КлассификаторТНВЭД</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>ЕдиницаИзмерения --&gt; ЕдиницаИзмерения</Наименование>
+						<Источник Имя="ЕдиницаИзмерения" Вид="Реквизит" Тип="СправочникСсылка.КлассификаторЕдиницИзмерения"/>
+						<Приемник Имя="ЕдиницаИзмерения" Вид="Реквизит" Тип="СправочникСсылка.УпаковкиЕдиницыИзмерения"/>
+						<КодПравилаКонвертации>КлассификаторЕдиницИзмерения                      </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>5</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>НаименованиеПолное --&gt; НаименованиеПолное</Наименование>
+						<Источник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>7</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ПрослеживаемыйТовар --&gt; ПрослеживаемыйТовар</Наименование>
+						<Источник Имя="ПрослеживаемыйТовар" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="ПрослеживаемыйТовар" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>СырьевойТовар --&gt; СырьевойТовар</Наименование>
+						<Источник Имя="СырьевойТовар" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="СырьевойТовар" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>8</Код>
+						<Наименование>ТаможеннаяПошлина --&gt; bit_ПроцентТаможеннойПошлины</Наименование>
+						<Источник Имя="ТаможеннаяПошлина" Вид="Реквизит" Тип="Число"/>
+						<Приемник Имя="bit_ПроцентТаможеннойПошлины" Вид="Реквизит" Тип="Число"/>
+					</Свойство>
+					<Свойство>
+						<Код>6</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ОбщероссийскийКлассификаторПродукции</Код>
+				<Наименование>Справочник: Общероссийский классификатор продукции</Наименование>
+				<Порядок>900</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.ОбщероссийскийКлассификаторПродукции</Источник>
+				<Приемник>СправочникСсылка.ОбщероссийскийКлассификаторПродукции</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<ПриводитьКДлине>10</ПриводитьКДлине>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>КлассификаторОКПД2</Код>
+				<Наименование>Справочник: Классификатор ОКПД2</Наименование>
+				<Порядок>950</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.КлассификаторОКПД2</Источник>
+				<Приемник>СправочникСсылка.КлассификаторОКПД2</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>3</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>НаименованиеПолное --&gt; НаименованиеПолное</Наименование>
+						<Источник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>Марки</Код>
+				<Наименование>:</Наименование>
+				<Порядок>1000</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Приемник>СправочникСсылка.Марки</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>--&gt; Наименование</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>КодыОперацийРаздела7ДекларацииПоНДС</Код>
+				<Наименование>Справочник: Коды операций раздела 7 декларации по НДС</Наименование>
+				<Порядок>1050</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.КодыОперацийРаздела7ДекларацииПоНДС</Источник>
+				<Приемник>СправочникСсылка.КодыОперацийРаздела7ДекларацииПоНДС</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>3</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>ОперацияНеПодлежитНалогообложению --&gt; ОперацияНеПодлежитНалогообложению</Наименование>
+						<Источник Имя="ОперацияНеПодлежитНалогообложению" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="ОперацияНеПодлежитНалогообложению" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>bit_ОсновнойПоставщик</Код>
+				<Наименование>Справочник: Контрагенты</Наименование>
+				<Порядок>1100</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.Контрагенты</Источник>
+				<Приемник>СправочникСсылка.bit_ОсновнойПоставщик</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>Пользователи</Код>
+				<Наименование>Справочник: Пользователи</Наименование>
+				<Порядок>1150</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<НеСоздаватьЕслиНеНайден>true</НеСоздаватьЕслиНеНайден>
+				<Источник>СправочникСсылка.Пользователи</Источник>
+				<Приемник>СправочникСсылка.Пользователи</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>ИдентификаторПользователяИБ --&gt; ИдентификаторПользователяИБ</Наименование>
+						<Источник Имя="ИдентификаторПользователяИБ" Вид="Реквизит" Тип="УникальныйИдентификатор"/>
+						<Приемник Имя="ИдентификаторПользователяИБ" Вид="Реквизит" Тип="УникальныйИдентификатор"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>3</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>Подразделение --&gt; Подразделение</Наименование>
+						<Источник Имя="Подразделение" Вид="Реквизит" Тип="СправочникСсылка.Подразделения"/>
+						<Приемник Имя="Подразделение" Вид="Реквизит" Тип="СправочникСсылка.СтруктураПредприятия"/>
+						<КодПравилаКонвертации>СтруктураПредприятия                              </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство Отключить="true" Поиск="true">
+						<Код>5</Код>
+						<Наименование>ФизЛицо --&gt; ФизическоеЛицо</Наименование>
+						<Источник Имя="ФизЛицо" Вид="Реквизит" Тип="СправочникСсылка.ФизическиеЛица"/>
+						<Приемник Имя="ФизическоеЛицо" Вид="Реквизит" Тип="СправочникСсылка.ФизическиеЛица"/>
+						<КодПравилаКонвертации>ФизическиеЛица                                    </КодПравилаКонвертации>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>Производители</Код>
+				<Наименование>Справочник: Контрагенты</Наименование>
+				<Порядок>1200</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.Контрагенты</Источник>
+				<Приемник>СправочникСсылка.Производители</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>Родитель --&gt; Родитель</Наименование>
+						<Источник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.Контрагенты"/>
+						<Приемник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.Производители"/>
+					</Свойство>
+					<Свойство Поиск="true" Обязательное="true">
+						<Код>4</Код>
+						<Наименование>ЭтоГруппа --&gt; ЭтоГруппа</Наименование>
+						<Источник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>СтавкиНДС</Код>
+				<Наименование>:</Наименование>
+				<Порядок>1250</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<НеСоздаватьЕслиНеНайден>true</НеСоздаватьЕслиНеНайден>
+				<Приемник>СправочникСсылка.СтавкиНДС</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>--&gt; Наименование</Наименование>
+						<ПолучитьИзВходящихДанных>true</ПолучитьИзВходящихДанных>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ЦеновыеГруппы</Код>
+				<Наименование>Справочник: Ценовые группы</Наименование>
+				<Порядок>1300</Порядок>
+				<ПередВыгрузкой>МассивЦеновыхГрупп = Новый Массив;
+МассивЦеновыхГрупп.Добавить("Амортизаторы"); 
+МассивЦеновыхГрупп.Добавить("АТЭ-1 - з/части к Генераторам и Стартерам");
+МассивЦеновыхГрупп.Добавить("АТЭ-1 Грузовая");
+МассивЦеновыхГрупп.Добавить("АТЭ-1 Легковая");  
+МассивЦеновыхГрупп.Добавить("Барабаны");
+МассивЦеновыхГрупп.Добавить("Бензонасосы АТЭ-1");
+МассивЦеновыхГрупп.Добавить("Вентиляторы ПРАМО");
+МассивЦеновыхГрупп.Добавить("Генераторы тракторные");
+МассивЦеновыхГрупп.Добавить("Домкраты ПРАМО");
+МассивЦеновыхГрупп.Добавить("Заводское Электрооборудование");
+МассивЦеновыхГрупп.Добавить("Карданный вал");
+МассивЦеновыхГрупп.Добавить("катушки, трамблеры");
+МассивЦеновыхГрупп.Добавить("Колодки");
+МассивЦеновыхГрупп.Добавить("Крестовины ПРАМО");
+МассивЦеновыхГрупп.Добавить("Маховики ПРАМО");
+МассивЦеновыхГрупп.Добавить("Моторы, приводы стеклооч ПРАМО и СтАТО");
+МассивЦеновыхГрупп.Добавить("Омыватели ПРАМО");
+МассивЦеновыхГрупп.Добавить("Омыватели СтАТО");
+МассивЦеновыхГрупп.Добавить("ПГУ Прамо");
+
+Если МассивЦеновыхГрупп.Найти(Источник.Наименование) = Неопределено Тогда
+	Отказ = Истина;
+КонецЕсли;</ПередВыгрузкой>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.ЦеновыеГруппы</Источник>
+				<Приемник>СправочникСсылка.ЦеновыеГруппы</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ВидыЦен</Код>
+				<Наименование>Типы цен номенклатуры --&gt; Виды цен</Наименование>
+				<Порядок>1325</Порядок>
+				<ПередВыгрузкой>// Перенос из УПП заблокирован до согласования перечня типов цен (ЛТ ЕН-010)
+				Отказ = Истина;</ПередВыгрузкой>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.ТипыЦенНоменклатуры</Источник>
+				<Приемник>СправочникСсылка.ВидыЦен</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>ВалютаЦены --&gt; ВалютаЦены</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="ВалютаЦены" Вид="Реквизит" Тип="СправочникСсылка.Валюты"/>
+						<Приемник Имя="ВалютаЦены" Вид="Реквизит" Тип="СправочникСсылка.Валюты"/>
+						<КодПравилаКонвертации>Валюты                                            </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ЦенаВключаетНДС --&gt; ЦенаВключаетНДС</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="ЦенаВключаетНДС" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="ЦенаВключаетНДС" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>ОкруглятьВБольшуюСторону --&gt; ОкруглятьВБольшуюСторону</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="ОкруглятьВБольшуюСторону" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="ОкруглятьВБольшуюСторону" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ЗначенияСвойствОбъектов</Код>
+				<Наименование>:</Наименование>
+				<Порядок>1350</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.ЗначенияСвойствОбъектов</Источник>
+				<Приемник>СправочникСсылка.ЗначенияСвойствОбъектов</Приемник>
+				<Свойства>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>Родитель --&gt; Родитель</Наименование>
+						<Источник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.ЗначенияСвойствОбъектов"/>
+						<Приемник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.ЗначенияСвойствОбъектов"/>
+					</Свойство>
+					<Свойство Обязательное="true">
+						<Код>5</Код>
+						<Наименование>ЭтоГруппа --&gt; ЭтоГруппа</Наименование>
+						<Источник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>--&gt; Владелец</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Владелец" Вид="Свойство" Тип="ПланВидовХарактеристикСсылка.ДополнительныеРеквизитыИСведения"/>
+						<КодПравилаКонвертации>ДополнительныеРеквизитыИСведения                  </КодПравилаКонвертации>
+						<ПередВыгрузкой>Если ВходящиеДанные &lt;&gt; Неопределено И ВходящиеДанные.Свойство("Свойство") Тогда
+	ИсходящиеДанные = Новый Структура;
+	ИсходящиеДанные.Вставить("Заголовок", ВходящиеДанные.Свойство);
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>Номенклатура</Код>
+				<Наименование>Справочник: Номенклатура</Наименование>
+				<Порядок>1400</Порядок>
+				<ПередВыгрузкой>ВестиУчетПоГТД = Ложь;
+
+Запрос = Новый Запрос;
+Запрос.Текст = 
+"ВЫБРАТЬ
+|	СерииНоменклатуры.НомерГТД
+|ИЗ
+|	Справочник.СерииНоменклатуры КАК СерииНоменклатуры
+|ГДЕ
+|	СерииНоменклатуры.Владелец = &amp;Источник
+|	И СерииНоменклатуры.НомерГТД &lt;&gt; ЗНАЧЕНИЕ(Справочник.НомераГТД.ПустаяСсылка)";
+
+Запрос.УстановитьПараметр("Источник", Источник);
+
+РезультатЗапроса = Запрос.Выполнить();
+
+Если Не РезультатЗапроса.Пустой() Тогда
+	ВестиУчетПоГТД = Истина;
+КонецЕсли;
+
+Если ВходящиеДанные = Неопределено Тогда
+	ВходящиеДанные = Новый Структура;
+КонецЕсли;
+
+ВходящиеДанные.Вставить("ВестиУчетПоГТД", ВестиУчетПоГТД);
+
+Выполнить(Алгоритмы.ВыгрузкаДопРеквизитовИСведений);
+Выполнить(Алгоритмы.СцепкаДляПоискаРодителя);</ПередВыгрузкой>
+				<ПослеЗагрузки>Если Объект &lt;&gt; Неопределено Тогда
+	
+	Если Объект.ЭтоНовый() Тогда
+		СсылкаНаОбъект = Объект.ПолучитьСсылкуНового();
+		Если Не ЗначениеЗаполнено(СсылкаНаОбъект) Тогда
+			СсылкаНаОбъект = Справочники.Контрагенты.ПолучитьСсылку();
+			Объект.УстановитьСсылкуНового(СсылкаНаОбъект);
+		КонецЕсли;
+	Иначе
+		СсылкаНаОбъект = Объект.Ссылка;
+	КонецЕсли;
+	
+	Если Не Объект.ЭтоГруппа Тогда
+		
+		Если ПараметрыОбъекта &lt;&gt; Неопределено Тогда 
+			
+			// Заполнение реквизита Родитель
+			Сцепка = ПараметрыОбъекта.Получить("СцепкаПараметр");
+			Если ЗначениеЗаполнено(Сцепка) И Не ЗначениеЗаполнено(Объект.Родитель) Тогда
+				
+				ДопОбработка = Справочники.ДополнительныеОтчетыИОбработки.НайтиПоНаименованию("Макеты");
+				ВнешняяОбработкаОбъект = ДополнительныеОтчетыИОбработки.ОбъектВнешнейОбработки(ДопОбработка);		
+				Объект.Родитель = ВнешняяОбработкаОбъект.РодительПоСцепке("УПП", Сцепка);
+				
+			КонецЕсли;
+			
+			// Заполнение реквизита ВидНоменклатуры 
+			Технический = Справочники.ВидыНоменклатуры.НайтиПоНаименованию("Технический"); 
+			
+			НаименованиеВидаНоменклатуры = ПараметрыОбъекта.Получить("НаименованиеВидаНоменклатуры");
+			НаименованиеВидаНоменклатурыПриёмник = Параметры.СоответствиеВидовНоменклатуры.Получить(НаименованиеВидаНоменклатуры);
+			Объект.bit_ВидНоменклатурыУПП = НаименованиеВидаНоменклатуры;
+			
+			Если Не ЗначениеЗаполнено(Объект.ВидНоменклатуры) Тогда 
+				
+				ВестиУчетПоХарактеристикам = ПараметрыОбъекта.Получить("ВестиУчетПоХарактеристикам");
+				
+				Если ЗначениеЗаполнено(НаименованиеВидаНоменклатурыПриёмник) Тогда
+					Если НаименованиеВидаНоменклатурыПриёмник = "Полуфабрикаты" И ВестиУчетПоХарактеристикам Тогда
+						НаименованиеВидаНоменклатурыПриёмник = "Полуфабрикаты собственные";
+					КонецЕсли;			
+					Объект.ВидНоменклатуры = Справочники.ВидыНоменклатуры.НайтиПоНаименованию(НаименованиеВидаНоменклатурыПриёмник);	
+				КонецЕсли;
+				
+				Если Не ЗначениеЗаполнено(Объект.ВидНоменклатуры) Тогда
+					Объект.ВидНоменклатуры = Технический;	
+				КонецЕсли;
+				
+				ВестиУчетПоГТД = Объект.ВестиУчетПоГТД;
+				ЕдИзмСрокаГодности = Объект.ЕдиницаИзмеренияСрокаГодности;
+				ВесИспользовать = Объект.ВесИспользовать;
+				ВесМожноУказыватьВДокументах = Объект.ВесМожноУказыватьВДокументах;
+
+				Справочники.Номенклатура.ЗаполнитьРеквизитыПоВидуНоменклатуры(Объект, Ложь, Ложь, Объект.ВидНоменклатуры, Ложь); 
+				
+				Объект.ВестиУчетПоГТД = ВестиУчетПоГТД;
+				Объект.ЕдиницаИзмеренияСрокаГодности = ЕдИзмСрокаГодности;
+				Объект.ВесИспользовать = ВесИспользовать;
+				Объект.ВесМожноУказыватьВДокументах = ВесМожноУказыватьВДокументах;
+				
+			КонецЕсли;
+			
+			// Заполнение реквизита СхемаОбеспечения
+			ВидВоспроизводства = ПараметрыОбъекта.Получить("ВидВоспроизводстваПараметр");
+			
+			Если ЗначениеЗаполнено(ВидВоспроизводства) Тогда
+				
+				ВидНоменклатуры = Объект.ВидНоменклатуры;
+				ВидНоменклатурыПолуфабрикаты = Справочники.ВидыНоменклатуры.НайтиПоНаименованию("Полуфабрикаты");
+				ВидНоменклатурыПокупныеПолуфабрикаты = Справочники.ВидыНоменклатуры.НайтиПоНаименованию("Покупные полуфабрикаты и комплектующие");
+				
+				НаименованиеСхемы = "";
+				
+				Если ВидВоспроизводства = "Производство" Тогда
+					
+					Если ВидНоменклатуры = ВидНоменклатурыПолуфабрикаты Тогда 
+						НаименованиеСхемы = "Полуфабрикаты собственные";
+						Выполнить(Алгоритмы.ПоискСхемыОбеспечения);		
+					Иначе
+						НаименованиеСхемы = "Готовая продукция";
+						Выполнить(Алгоритмы.ПоискСхемыОбеспечения);
+					КонецЕсли;
+					
+				ИначеЕсли ВидВоспроизводства = "Покупка" Тогда
+					
+					Если ВидНоменклатуры = ВидНоменклатурыПокупныеПолуфабрикаты Тогда 
+						НаименованиеСхемы = "Покупные полуфабрикаты";
+						Выполнить(Алгоритмы.ПоискСхемыОбеспечения);		
+					Иначе
+						НаименованиеСхемы = "Материалы";
+						Выполнить(Алгоритмы.ПоискСхемыОбеспечения);
+					КонецЕсли;
+					
+				КонецЕсли;
+				
+				Если Не ПустаяСтрока(НаименованиеСхемы) Тогда
+					СхемаОбеспечения = Справочники.СхемыОбеспечения.НайтиПоНаименованию(НаименованиеСхемы);
+					Объект.СхемаОбеспечения = СхемаОбеспечения;
+				КонецЕсли;
+				
+			КонецЕсли;
+			
+			// Заполнение доп сведения МестоХранения
+			МестоХранения = ПараметрыОбъекта.Получить("МестоХраненияПараметр");
+			Если ЗначениеЗаполнено(МестоХранения) Тогда
+				
+				ДопСведениеМестоХранения = ПланыВидовХарактеристик.ДополнительныеРеквизитыИСведения.НайтиПоНаименованию("Место хранения");
+				
+				Если Не ЗначениеЗаполнено(ДопСведениеМестоХранения) Тогда
+					Параметры = УправлениеСвойствами.ПараметрыДобавленияСвойства();
+					Параметры.Наименование = "Место хранения";
+					Параметры.ТипЗначения = Новый ОписаниеТипов("СправочникСсылка.Склады");
+					Владелец = УправлениеСвойствами.НаборСвойствПоИмени("Справочник_Номенклатура_Общие");
+					ДопСведениеМестоХранения = УправлениеСвойствами.ДобавитьСвойство(Владелец, Параметры, Перечисления.ВидыСвойств.ДополнительныеСведения);  
+				КонецЕсли;
+					
+				СвойстваОбъекта = Новый ТаблицаЗначений;
+				СвойстваОбъекта.Колонки.Добавить("Свойство");
+				СвойстваОбъекта.Колонки.Добавить("Значение");
+				НоваяСтрока = СвойстваОбъекта.Добавить();
+				НоваяСтрока.Свойство = ДопСведениеМестоХранения;
+				НоваяСтрока.Значение = МестоХранения;
+				УправлениеСвойствами.ЗаписатьСвойстваУОбъекта(СсылкаНаОбъект, СвойстваОбъекта);
+				
+			КонецЕсли;
+			
+		КонецЕсли;
+		
+		// Заполнение реквизитов объема
+		Если Объект.ОбъемЧислитель &gt; 0 Тогда
+			Объект.ОбъемЗнаменатель = 1;
+			Объект.ОбъемИспользовать = Истина;
+			Объект.ОбъемЕдиницаИзмерения = НоменклатураСервер.ЕдиницаИзмеренияПоУмолчанию("Объем");
+		КонецЕсли;
+		
+		Объект.ОбъемМожноУказыватьВДокументах = Ложь;
+		
+		// Заполнение реквизитов веса
+		Если Объект.ВесЧислитель &gt; 0 Тогда
+			Объект.ВесЗнаменатель = 1;
+			Объект.ВесИспользовать = Истина;
+			Объект.ВесЕдиницаИзмерения = НоменклатураСервер.ЕдиницаИзмеренияПоУмолчанию("Вес");
+			Объект.ВесМожноУказыватьВДокументах = Истина;
+		КонецЕсли; 
+		
+		// Заполнение Ед. изм ТНВЭД
+		Если ЗначениеЗаполнено(Объект.КодТНВЭД) Тогда
+			Объект.ЕдиницаИзмеренияТНВЭД = ОбщегоНазначения.ЗначениеРеквизитаОбъекта(Объект.КодТНВЭД, "ЕдиницаИзмерения");	
+		КонецЕсли;
+		
+	КонецЕсли;
+	
+	Если ОбъектНайден Тогда
+		
+		// Восстанавливаем реквизиты из ссылки, т.к. их нельзя перезаполнять
+		Ссылка = Объект.Ссылка;
+		
+		ДанныеСсылки = ОбщегоНазначения.ЗначенияРеквизитовОбъекта(Ссылка,
+		"СтавкаНДС, Код, Наименование, ПометкаУдаления, Артикул, ВесЕдиницаИзмерения, ВесЗнаменатель, ВесЧислитель, 
+		|ВидАлкогольнойПродукции, Описание, ЕдиницаДляОтчетов, ЕдиницаИзмерения, ИмпортнаяАлкогольнаяПродукция,
+		|КодТНВЭД, Марка, НаименованиеПолное, ОбъемДАЛ, bit_ОсновнойПоставщик, bit_ОтветственныйМенеджер, Производитель, ЦеноваяГруппа, ВестиУчетПоГТД");
+		
+		Для каждого Элемент Из ДанныеСсылки Цикл
+			
+			Если ТипЗнч(Элемент.Значение) = Тип("Булево") Тогда
+				Если Элемент.Значение Тогда
+					Объект[Элемент.Ключ] = Истина;	
+				КонецЕсли;
+				Продолжить;
+	        КонецЕсли;
+			
+			Если ЗначениеЗаполнено(Элемент.Значение) Тогда					
+				Объект[Элемент.Ключ] = Элемент.Значение;	
+			КонецЕсли;
+			
+		КонецЦикла;
+		
+	КонецЕсли; 
+	
+КонецЕсли;</ПослеЗагрузки>
+				<ПоследовательностьПолейПоиска>Если НомерВариантаПоиска = 1 Тогда
+	СтрокаИменСвойствПоиска = "bit_UIDУПП";
+Иначе
+	СтрокаИменСвойствПоиска = "Код";
+КонецЕсли;</ПоследовательностьПолейПоиска>
+				<НеЗапоминатьВыгруженные>true</НеЗапоминатьВыгруженные>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.Номенклатура</Источник>
+				<Приемник>СправочникСсылка.Номенклатура</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>12</Код>
+						<Наименование>_ГруппаТМЦ --&gt; bit_ГруппаТМЦ</Наименование>
+						<Источник Имя="_ГруппаТМЦ" Вид="Реквизит" Тип="СправочникСсылка._ГруппыТМЦ"/>
+						<Приемник Имя="bit_ГруппаТМЦ" Вид="Реквизит" Тип="СправочникСсылка.bit_ГруппаТМЦ"/>
+						<КодПравилаКонвертации>bit_ГруппаТМЦ                                     </КодПравилаКонвертации>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	Если Не ЗначениеЗаполнено(Источник._ГруппаТМЦ) Тогда
+		//Отбор = Новый Структура;
+		//Отбор.Вставить("Объект", Справочники.Номенклатура.НайтиПоКоду("05093201208"));
+		//Отбор.Вставить("Свойство", ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000048"));
+		//Значение = РегистрыСведений.ЗначенияСвойствОбъектов.Получить(Отбор).Значение; 
+		
+		ДопСвойства = ВходящиеДанные.ДопСвойства;
+		СвойствоГруппаТМЦ = ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000048");
+		Значение = ДопСвойства.Получить(СвойствоГруппаТМЦ); 
+	КонецЕсли;
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>46</Код>
+						<Наименование>--&gt; bit_UIDУПП</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="bit_UIDУПП" Вид="Реквизит" Тип="Строка"/>
+						<ПередВыгрузкой>Значение = Источник.УникальныйИдентификатор();</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>40</Код>
+						<Наименование>--&gt; bit_Категория</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="bit_Категория" Вид="Реквизит" Тип="ПеречислениеСсылка.bit_Категория"/>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	ДопСвойства = ВходящиеДанные.ДопСвойства;
+	Свойство = ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000052");
+	ЗначениеДопСвойства = ДопСвойства.Получить(Свойство);
+	Если ЗначениеЗаполнено(ЗначениеДопСвойства) Тогда
+		Если СтрНайти(ЗначениеДопСвойства, "Упаковка") &gt; 0 Тогда
+			Значение = "ТМЦУпаковка";
+		ИначеЕсли СтрНайти(ЗначениеДопСвойства, "Комплектация") &gt; 0 Тогда
+			Значение = "ТМЦКомплектация";
+		Иначе
+			Значение = "ТМЦМатериалы";	
+		КонецЕсли;
+	КонецЕсли;
+КонецЕсли</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>41</Код>
+						<Наименование>--&gt; bit_КатегорияТМЦ</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="bit_КатегорияТМЦ" Вид="Реквизит" Тип="ПеречислениеСсылка.bit_КатегорииТМЦ"/>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	ДопСвойства = ВходящиеДанные.ДопСвойства;
+	Свойство = ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000045");
+	ЗначениеДопСвойства = ДопСвойства.Получить(Свойство);
+	Если ЗначениеЗаполнено(ЗначениеДопСвойства) Тогда
+		Если СтрНайти(ЗначениеДопСвойства, "Прочие") &gt; 0 Тогда
+			Значение = "Прочее";
+		Иначе
+			Значение = Строка(ЗначениеДопСвойства);	
+		КонецЕсли;
+	КонецЕсли;
+КонецЕсли</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>--&gt; bit_РодительУПП</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="bit_РодительУПП" Вид="Реквизит" Тип="Строка"/>
+						<ПередВыгрузкой>Если ЗначениеЗаполнено(Источник.Родитель) Тогда
+	Значение = ОбщегоНазначения.ЗначениеРеквизитаОбъекта(Источник.Родитель, "Наименование");	
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>17</Код>
+						<Наименование>--&gt; Качество</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Качество" Вид="Реквизит" Тип="ПеречислениеСсылка.ГрадацииКачества"/>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	Значение = "Новый";	
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>21</Код>
+						<Наименование>--&gt; Марка</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Марка" Вид="Реквизит" Тип="СправочникСсылка.Марки"/>
+						<КодПравилаКонвертации>Марки                                             </КодПравилаКонвертации>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	ДопСвойства = ВходящиеДанные.ДопСвойства;
+	СвойствоМарка = ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000001");
+	Значение = ДопСвойства.Получить(СвойствоМарка); 
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>32</Код>
+						<Наименование>--&gt; СтавкаНДС</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="СтавкаНДС" Вид="Реквизит" Тип="СправочникСсылка.СтавкиНДС"/>
+						<КодПравилаКонвертации>СтавкиНДС                                         </КодПравилаКонвертации>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	
+	Если ИсходящиеДанные = Неопределено Тогда
+		ИсходящиеДанные = Новый Структура;
+	КонецЕсли;
+	
+	НаименованиеСтавки = "";
+	ЗначениеСтавки = Источник.СтавкаНДС;
+	Выполнить(Алгоритмы.НаименованиеСтавкиНДС);
+	ИсходящиеДанные.Вставить("Наименование", НаименованиеСтавки);  
+	
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>47</Код>
+						<Наименование>--&gt; СцепкаПараметр</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="" Вид=""/>
+						<ИмяПараметраДляПередачи>СцепкаПараметр</ИмяПараметраДляПередачи>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа И ВходящиеДанные &lt;&gt; Неопределено Тогда
+
+	Сцепка = "";
+	ВходящиеДанные.Свойство("Сцепка", Сцепка);
+	
+	Значение = Сцепка;
+	
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>8</Код>
+						<Наименование>Артикул --&gt; bit_АртикулУПП</Наименование>
+						<Источник Имя="Артикул" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="bit_АртикулУПП" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>7</Код>
+						<Наименование>Артикул --&gt; Артикул</Наименование>
+						<Источник Имя="Артикул" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="Артикул" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>9</Код>
+						<Наименование>ВидАлкогольнойПродукцииЕГАИС --&gt; ВидАлкогольнойПродукции</Наименование>
+						<Источник Имя="ВидАлкогольнойПродукцииЕГАИС" Вид="Реквизит" Тип="СправочникСсылка.ВидыАлкогольнойПродукции"/>
+						<Приемник Имя="ВидАлкогольнойПродукции" Вид="Реквизит" Тип="СправочникСсылка.ВидыАлкогольнойПродукции"/>
+						<КодПравилаКонвертации>ВидыАлкогольнойПродукции                          </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>10</Код>
+						<Наименование>ВидВоспроизводства --&gt; ВидВоспроизводстваПараметр</Наименование>
+						<Источник Имя="ВидВоспроизводства" Вид="Реквизит" Тип="ПеречислениеСсылка.ВидыВоспроизводстваНоменклатуры"/>
+						<Приемник Имя="" Вид=""/>
+						<ИмяПараметраДляПередачи>ВидВоспроизводстваПараметр</ИмяПараметраДляПередачи>
+						<ПередВыгрузкой>Если ЗначениеЗаполнено(Источник.ВидВоспроизводства) Тогда
+	Значение = Строка(Источник.ВидВоспроизводства);	
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>11</Код>
+						<Наименование>ВидНоменклатуры --&gt; НаименованиеВидаНоменклатуры</Наименование>
+						<Источник Имя="ВидНоменклатуры" Вид="Реквизит" Тип="СправочникСсылка.ВидыНоменклатуры"/>
+						<Приемник Имя="" Вид=""/>
+						<ИмяПараметраДляПередачи>НаименованиеВидаНоменклатуры</ИмяПараметраДляПередачи>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	Значение = ОбщегоНазначения.ЗначениеРеквизитаОбъекта(Источник.ВидНоменклатуры, "Наименование");
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>13</Код>
+						<Наименование>ДополнительноеОписаниеНоменклатуры --&gt; Описание</Наименование>
+						<Источник Имя="ДополнительноеОписаниеНоменклатуры" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="Описание" Вид="Реквизит" Тип="Строка"/>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа И ПустаяСтрока(Источник.ДополнительноеОписаниеНоменклатуры) Тогда
+	Значение = Источник.Комментарий;
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>14</Код>
+						<Наименование>ЕдиницаДляОтчетов --&gt; ЕдиницаДляОтчетов</Наименование>
+						<Источник Имя="ЕдиницаДляОтчетов" Вид="Реквизит" Тип="СправочникСсылка.ЕдиницыИзмерения"/>
+						<Приемник Имя="ЕдиницаДляОтчетов" Вид="Реквизит" Тип="СправочникСсылка.УпаковкиЕдиницыИзмерения"/>
+						<КодПравилаКонвертации>УпаковкиЕдиницыИзмерения                          </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>15</Код>
+						<Наименование>ЕдиницаХраненияОстатков --&gt; ЕдиницаИзмерения</Наименование>
+						<Источник Имя="ЕдиницаХраненияОстатков" Вид="Реквизит" Тип="СправочникСсылка.ЕдиницыИзмерения"/>
+						<Приемник Имя="ЕдиницаИзмерения" Вид="Реквизит" Тип="СправочникСсылка.УпаковкиЕдиницыИзмерения"/>
+						<КодПравилаКонвертации>УпаковкиЕдиницыИзмерения                          </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>16</Код>
+						<Наименование>ИмпортнаяАлкогольнаяПродукция --&gt; ИмпортнаяАлкогольнаяПродукция</Наименование>
+						<Источник Имя="ИмпортнаяАлкогольнаяПродукция" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="ИмпортнаяАлкогольнаяПродукция" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<ПередВыгрузкой>КодДляПоиска = ДопОбработки.Макеты.ЗначениеКодаСвязи("УПП", Источник.Код); 
+
+Если Не ПустаяСтрока(КодДляПоиска) Тогда
+	Значение = КодДляПоиска;
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>25</Код>
+						<Наименование>КодРаздел7ДекларацииНДС --&gt; КодРаздел7ДекларацииНДС</Наименование>
+						<Источник Имя="КодРаздел7ДекларацииНДС" Вид="Реквизит" Тип="СправочникСсылка.КодыОперацийРаздела7ДекларацииПоНДС"/>
+						<Приемник Имя="КодРаздел7ДекларацииНДС" Вид="Реквизит" Тип="СправочникСсылка.КодыОперацийРаздела7ДекларацииПоНДС"/>
+						<КодПравилаКонвертации>КодыОперацийРаздела7ДекларацииПоНДС               </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>18</Код>
+						<Наименование>КодТНВЭД --&gt; КодТНВЭД</Наименование>
+						<Источник Имя="КодТНВЭД" Вид="Реквизит" Тип="СправочникСсылка.КлассификаторТНВЭД"/>
+						<Приемник Имя="КодТНВЭД" Вид="Реквизит" Тип="СправочникСсылка.КлассификаторТНВЭД"/>
+						<КодПравилаКонвертации>КлассификаторТНВЭД                                </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>26</Код>
+						<Наименование>Крепость --&gt; Крепость</Наименование>
+						<Источник Имя="Крепость" Вид="Реквизит" Тип="Число"/>
+						<Приемник Имя="Крепость" Вид="Реквизит" Тип="Число"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>Наименование --&gt; bit_НаименованиеУПП</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="bit_НаименованиеУПП" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>23</Код>
+						<Наименование>НаименованиеПолное --&gt; bit_НаименованиеПолноеУПП</Наименование>
+						<Источник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="bit_НаименованиеПолноеУПП" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>22</Код>
+						<Наименование>НаименованиеПолное --&gt; НаименованиеПолное</Наименование>
+						<Источник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>28</Код>
+						<Наименование>НоменклатурнаяГруппа --&gt; ГруппаАналитическогоУчета</Наименование>
+						<Источник Имя="НоменклатурнаяГруппа" Вид="Реквизит" Тип="СправочникСсылка.НоменклатурныеГруппы"/>
+						<Приемник Имя="ГруппаАналитическогоУчета" Вид="Реквизит" Тип="СправочникСсылка.ГруппыАналитическогоУчетаНоменклатуры"/>
+						<КодПравилаКонвертации>ГруппыАналитическогоУчетаНоменклатуры             </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>24</Код>
+						<Наименование>ОбъемДАЛ --&gt; ОбъемДАЛ</Наименование>
+						<Источник Имя="ОбъемДАЛ" Вид="Реквизит" Тип="Число"/>
+						<Приемник Имя="ОбъемДАЛ" Вид="Реквизит" Тип="Число"/>
+					</Свойство>
+					<Свойство>
+						<Код>19</Код>
+						<Наименование>ОКП --&gt; КодОКП</Наименование>
+						<Источник Имя="ОКП" Вид="Реквизит" Тип="СправочникСсылка.ОбщероссийскийКлассификаторПродукции"/>
+						<Приемник Имя="КодОКП" Вид="Реквизит" Тип="СправочникСсылка.ОбщероссийскийКлассификаторПродукции"/>
+						<КодПравилаКонвертации>ОбщероссийскийКлассификаторПродукции              </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>29</Код>
+						<Наименование>ОсновнойПоставщик --&gt; bit_ОсновнойПоставщик</Наименование>
+						<Источник Имя="ОсновнойПоставщик" Вид="Реквизит" Тип="СправочникСсылка.Контрагенты"/>
+						<Приемник Имя="bit_ОсновнойПоставщик" Вид="Реквизит" Тип="СправочникСсылка.bit_ОсновнойПоставщик"/>
+						<КодПравилаКонвертации>bit_ОсновнойПоставщик                             </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>30</Код>
+						<Наименование>ОтветственныйМенеджерЗаПокупки --&gt; bit_ОтветственныйМенеджер</Наименование>
+						<Источник Имя="ОтветственныйМенеджерЗаПокупки" Вид="Реквизит" Тип="СправочникСсылка.Пользователи"/>
+						<Приемник Имя="bit_ОтветственныйМенеджер" Вид="Реквизит" Тип="СправочникСсылка.Пользователи"/>
+						<КодПравилаКонвертации>Пользователи                                      </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>5</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>31</Код>
+						<Наименование>Производитель --&gt; Производитель</Наименование>
+						<Источник Имя="Производитель" Вид="Реквизит" Тип="СправочникСсылка.Контрагенты"/>
+						<Приемник Имя="Производитель" Вид="Реквизит" Тип="СправочникСсылка.Производители"/>
+						<КодПравилаКонвертации>Производители                                     </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>34</Код>
+						<Наименование>ЦеноваяГруппа --&gt; ЦеноваяГруппа</Наименование>
+						<Источник Имя="ЦеноваяГруппа" Вид="Реквизит" Тип="СправочникСсылка.ЦеновыеГруппы"/>
+						<Приемник Имя="ЦеноваяГруппа" Вид="Реквизит" Тип="СправочникСсылка.ЦеновыеГруппы"/>
+						<КодПравилаКонвертации>ЦеновыеГруппы                                     </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>35</Код>
+						<Наименование>ЭтоВспомогательныйМатериал --&gt; bit_ВспомогательныйМатериал</Наименование>
+						<Источник Имя="ЭтоВспомогательныйМатериал" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="bit_ВспомогательныйМатериал" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство Обязательное="true">
+						<Код>6</Код>
+						<Наименование>ЭтоГруппа --&gt; ЭтоГруппа</Наименование>
+						<Источник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>48</Код>
+						<Наименование>Код --&gt; bit_КодУПП</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="bit_КодУПП" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>36</Код>
+						<Наименование>--&gt; ВидТовараПараметр</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="" Вид=""/>
+						<КодПравилаКонвертации>ЗначенияСвойствОбъектов                           </КодПравилаКонвертации>
+						<ИмяПараметраДляПередачи>ВидТовараПараметр</ИмяПараметраДляПередачи>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	ДопСвойства = ВходящиеДанные.ДопСвойства;
+	Свойство = ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000044");
+	Значение = ДопСвойства.Получить(Свойство); 
+	Если ИсходящиеДанные = Неопределено Тогда
+		ИсходящиеДанные = Новый Структура;
+	КонецЕсли;
+	ИсходящиеДанные.Вставить("Свойство", "Вид товара");
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>37</Код>
+						<Наименование>--&gt; ГруппаГППараметр</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="" Вид=""/>
+						<ИмяПараметраДляПередачи>ГруппаГППараметр</ИмяПараметраДляПередачи>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	ДопСвойства = ВходящиеДанные.ДопСвойства;
+	Свойство = ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000038");
+	Значение = ДопСвойства.Получить(Свойство); 
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>38</Код>
+						<Наименование>--&gt; ГруппаМППараметр</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="" Вид=""/>
+						<КодПравилаКонвертации>ЗначенияСвойствОбъектов                           </КодПравилаКонвертации>
+						<ИмяПараметраДляПередачи>ГруппаМППараметр</ИмяПараметраДляПередачи>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	ДопСвойства = ВходящиеДанные.ДопСвойства;
+	Свойство = ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000043");
+	Значение = ДопСвойства.Получить(Свойство);
+	Если ИсходящиеДанные = Неопределено Тогда
+		ИсходящиеДанные = Новый Структура;
+	КонецЕсли;
+	ИсходящиеДанные.Вставить("Свойство", "Группа МП");
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>39</Код>
+						<Наименование>--&gt; ДиаметрПараметр</Наименование>
+						<Порядок>250</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="" Вид=""/>
+						<КодПравилаКонвертации>ЗначенияСвойствОбъектов                           </КодПравилаКонвертации>
+						<ИмяПараметраДляПередачи>ДиаметрПараметр</ИмяПараметраДляПередачи>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	ДопСвойства = ВходящиеДанные.ДопСвойства;
+	Свойство = ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000046");
+	Значение = ДопСвойства.Получить(Свойство);
+	Если ИсходящиеДанные = Неопределено Тогда
+		ИсходящиеДанные = Новый Структура;
+	КонецЕсли;
+	ИсходящиеДанные.Вставить("Свойство", "Диаметр");
+КонецЕсли</ПередВыгрузкой>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>42</Код>
+						<Наименование>--&gt; КодВСистемеКАМАЗПараметр</Наименование>
+						<Порядок>300</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="" Вид=""/>
+						<ИмяПараметраДляПередачи>КодВСистемеКАМАЗПараметр</ИмяПараметраДляПередачи>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	ДопСвойства = ВходящиеДанные.ДопСвойства;
+	Свойство = ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000039");
+	Значение = ДопСвойства.Получить(Свойство);
+КонецЕсли</ПередВыгрузкой>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>43</Код>
+						<Наименование>--&gt; ПризнакГППараметр</Наименование>
+						<Порядок>350</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="" Вид=""/>
+						<КодПравилаКонвертации>ЗначенияСвойствОбъектов                           </КодПравилаКонвертации>
+						<ИмяПараметраДляПередачи>ПризнакГППараметр</ИмяПараметраДляПередачи>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	ДопСвойства = ВходящиеДанные.ДопСвойства;
+	Свойство = ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000078");
+	Значение = ДопСвойства.Получить(Свойство); 
+	Если ИсходящиеДанные = Неопределено Тогда
+		ИсходящиеДанные = Новый Структура;
+	КонецЕсли;
+	ИсходящиеДанные.Вставить("Свойство", "Признак ГП");
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>44</Код>
+						<Наименование>--&gt; ПризнакТМЦПараметр</Наименование>
+						<Порядок>400</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="" Вид=""/>
+						<КодПравилаКонвертации>ЗначенияСвойствОбъектов                           </КодПравилаКонвертации>
+						<ИмяПараметраДляПередачи>ПризнакТМЦПараметр</ИмяПараметраДляПередачи>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	ДопСвойства = ВходящиеДанные.ДопСвойства;
+	Свойство = ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000047");
+	Значение = ДопСвойства.Получить(Свойство); 
+	Если ИсходящиеДанные = Неопределено Тогда
+		ИсходящиеДанные = Новый Структура;
+	КонецЕсли;
+	ИсходящиеДанные.Вставить("Свойство", "Признак ТМЦ");
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство Отключить="true">
+						<Код>45</Код>
+						<Наименование>--&gt; ТарнаяНормаПараметр</Наименование>
+						<Порядок>450</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="" Вид=""/>
+						<ИмяПараметраДляПередачи>ТарнаяНормаПараметр</ИмяПараметраДляПередачи>
+						<ПередВыгрузкой>Если Не Источник.ЭтоГруппа Тогда
+	ДопСвойства = ВходящиеДанные.ДопСвойства;
+	Свойство = ПланыВидовХарактеристик.СвойстваОбъектов.НайтиПоКоду("00000000042");
+	Значение = ДопСвойства.Получить(Свойство);
+КонецЕсли</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>49</Код>
+						<Наименование>--&gt; ВесЧислитель</Наименование>
+						<Порядок>500</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="ВесЧислитель" Вид="Реквизит" Тип="Число"/>
+						<ПередВыгрузкой>Значение = ОбщегоНазначения.ЗначениеРеквизитаОбъекта(Источник.ЕдиницаХраненияОстатков, "Вес");</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>50</Код>
+						<Наименование>--&gt; ВестиУчетПоГТД</Наименование>
+						<Порядок>550</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="ВестиУчетПоГТД" Вид="Реквизит" Тип="Булево"/>
+						<ПередВыгрузкой>Если ВходящиеДанные &lt;&gt; Неопределено Тогда
+	ВестиУчетПоГТД = Ложь;
+	ВходящиеДанные.Свойство("ВестиУчетПоГТД", ВестиУчетПоГТД);
+	Значение = ВестиУчетПоГТД;
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>51</Код>
+						<Наименование>ВестиУчетПоХарактеристикам --&gt; ВестиУчетПоХарактеристикам</Наименование>
+						<Порядок>600</Порядок>
+						<Источник Имя="ВестиУчетПоХарактеристикам" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="" Вид=""/>
+						<ИмяПараметраДляПередачи>ВестиУчетПоХарактеристикам</ИмяПараметраДляПередачи>
+					</Свойство>
+					<Свойство>
+						<Код>20</Код>
+						<Наименование>ОКПД2 --&gt; КодОКПД2</Наименование>
+						<Порядок>650</Порядок>
+						<Источник Имя="ОКПД2" Вид="Реквизит" Тип="СправочникСсылка.КлассификаторОКПД2"/>
+						<Приемник Имя="КодОКПД2" Вид="Реквизит" Тип="СправочникСсылка.КлассификаторОКПД2"/>
+						<КодПравилаКонвертации>КлассификаторОКПД2                                </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>52</Код>
+						<Наименование>--&gt; ОбъемЧислитель</Наименование>
+						<Порядок>700</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="ОбъемЧислитель" Вид="Реквизит" Тип="Число"/>
+						<ПередВыгрузкой>Значение = ОбщегоНазначения.ЗначениеРеквизитаОбъекта(Источник.ЕдиницаХраненияОстатков, "Объем");</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>27</Код>
+						<Наименование>МестоХранения --&gt; МестоХраненияПараметр</Наименование>
+						<Порядок>750</Порядок>
+						<Источник Имя="МестоХранения" Вид="Реквизит" Тип="СправочникСсылка.Склады"/>
+						<Приемник Имя="" Вид=""/>
+						<КодПравилаКонвертации>Склады                                            </КодПравилаКонвертации>
+						<ИмяПараметраДляПередачи>МестоХраненияПараметр</ИмяПараметраДляПередачи>
+					</Свойство>
+					<Свойство>
+						<Код>33</Код>
+						<Наименование>СтатьяЗатрат --&gt; bit_СтатьяРасходов</Наименование>
+						<Порядок>800</Порядок>
+						<Источник Имя="СтатьяЗатрат" Вид="Реквизит" Тип="СправочникСсылка.СтатьиЗатрат"/>
+						<Приемник Имя="bit_СтатьяРасходов" Вид="Реквизит" Тип="ПланВидовХарактеристикСсылка.СтатьиРасходов"/>
+						<КодПравилаКонвертации>СтатьиРасходов                                    </КодПравилаКонвертации>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ЗначенияСвойствОбъектовСправочник</Код>
+				<Наименование>Справочник: Значения свойств объектов (Классификатор)</Наименование>
+				<Порядок>1450</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.ЗначенияСвойствОбъектов</Источник>
+				<Приемник>СправочникСсылка.ЗначенияСвойствОбъектов</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>Владелец --&gt; Владелец</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Владелец" Вид="Свойство" Тип="ПланВидовХарактеристикСсылка.СвойстваОбъектов"/>
+						<Приемник Имя="Владелец" Вид="Свойство" Тип="ПланВидовХарактеристикСсылка.ДополнительныеРеквизитыИСведения"/>
+						<КодПравилаКонвертации>ДополнительныеРеквизитыИСведения                  </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>Родитель --&gt; Родитель</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.ЗначенияСвойствОбъектов"/>
+						<Приемник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.ЗначенияСвойствОбъектов"/>
+					</Свойство>
+					<Свойство Поиск="true" Обязательное="true">
+						<Код>5</Код>
+						<Наименование>ЭтоГруппа --&gt; ЭтоГруппа</Наименование>
+						<Порядок>250</Порядок>
+						<Источник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ВидыДокументовФизическихЛиц</Код>
+				<Наименование>Справочник: Документы, удостоверяющие личность</Наименование>
+				<Порядок>1500</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.ДокументыУдостоверяющиеЛичность</Источник>
+				<Приемник>СправочникСсылка.ВидыДокументовФизическихЛиц</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>КодПФР --&gt; КодПФР</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="КодПФР" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КодПФР" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>Контрагенты</Код>
+				<Наименование>Справочник: Контрагенты</Наименование>
+				<Порядок>1550</Порядок>
+				<ПередВыгрузкой>Запрос = Новый Запрос;
+Запрос.Текст = 
+"ВЫБРАТЬ
+|	КонтактнаяИнформация.Вид,
+|	КонтактнаяИнформация.Вид КАК ВидДляСписка,
+|	КонтактнаяИнформация.Значение,
+|	КонтактнаяИнформация.Представление,
+|	КонтактнаяИнформация.Тип
+|ИЗ
+|	РегистрСведений.КонтактнаяИнформация КАК КонтактнаяИнформация
+|ГДЕ
+|	КонтактнаяИнформация.Объект = &amp;Объект";
+
+Запрос.УстановитьПараметр("Объект", Объект);
+
+КонтактнаяИнформация = Запрос.Выполнить().Выгрузить();
+
+Если ВходящиеДанные = Неопределено Тогда
+	ВходящиеДанные = Новый Структура;
+КонецЕсли;
+
+ВходящиеДанные.Вставить("КонтактнаяИнформация", КонтактнаяИнформация);</ПередВыгрузкой>
+				<НеЗапоминатьВыгруженные>true</НеЗапоминатьВыгруженные>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.Контрагенты</Источник>
+				<Приемник>СправочникСсылка.Контрагенты</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>--&gt; bit_UIDУПП</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="bit_UIDУПП" Вид="Реквизит" Тип="Строка"/>
+						<ПередВыгрузкой>Значение = Источник.УникальныйИдентификатор();</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>ГоловнойКонтрагент --&gt; ГоловнойКонтрагент</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="ГоловнойКонтрагент" Вид="Реквизит" Тип="СправочникСсылка.Контрагенты"/>
+						<Приемник Имя="ГоловнойКонтрагент" Вид="Реквизит" Тип="СправочникСсылка.Контрагенты"/>
+						<КодПравилаКонвертации>Контрагенты                                       </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>5</Код>
+						<Наименование>ДополнительноеОписание --&gt; ДополнительнаяИнформация</Наименование>
+						<Порядок>250</Порядок>
+						<Источник Имя="ДополнительноеОписание" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="ДополнительнаяИнформация" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>6</Код>
+						<Наименование>ИНН --&gt; ИНН</Наименование>
+						<Порядок>300</Порядок>
+						<Источник Имя="ИНН" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="ИНН" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>7</Код>
+						<Наименование>КодПоОКПО --&gt; КодПоОКПО</Наименование>
+						<Порядок>350</Порядок>
+						<Источник Имя="КодПоОКПО" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КодПоОКПО" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>8</Код>
+						<Наименование>КПП --&gt; КПП</Наименование>
+						<Порядок>400</Порядок>
+						<Источник Имя="КПП" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КПП" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>9</Код>
+						<Наименование>НаименованиеПолное --&gt; НаименованиеПолное</Наименование>
+						<Порядок>450</Порядок>
+						<Источник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>10</Код>
+						<Наименование>ОбособленноеПодразделение --&gt; ОбособленноеПодразделение</Наименование>
+						<Порядок>500</Порядок>
+						<Источник Имя="ОбособленноеПодразделение" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="ОбособленноеПодразделение" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>11</Код>
+						<Наименование>РегистрационныйНомер --&gt; РегистрационныйНомер</Наименование>
+						<Порядок>550</Порядок>
+						<Источник Имя="РегистрационныйНомер" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="РегистрационныйНомер" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>12</Код>
+						<Наименование>СтранаРегистрации --&gt; СтранаРегистрации</Наименование>
+						<Порядок>600</Порядок>
+						<Источник Имя="СтранаРегистрации" Вид="Реквизит" Тип="СправочникСсылка.КлассификаторСтранМира"/>
+						<Приемник Имя="СтранаРегистрации" Вид="Реквизит" Тип="СправочникСсылка.СтраныМира"/>
+						<КодПравилаКонвертации>СтраныМира                                        </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>13</Код>
+						<Наименование>--&gt; ЮридическоеФизическоеЛицо</Наименование>
+						<Порядок>650</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="ЮридическоеФизическоеЛицо" Вид="Реквизит" Тип="ПеречислениеСсылка.ЮридическоеФизическоеЛицо"/>
+						<ПередВыгрузкой>Если Источник.ЮрФизЛицо = Перечисления.ЮрФизЛицо.ФизЛицо Тогда
+	Значение = "ФизическоеЛицо";
+Иначе
+	Значение = "ЮридическоеЛицо";
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>14</Код>
+						<Наименование>ЮрФизЛицо --&gt; ЮрФизЛицо</Наименование>
+						<Порядок>700</Порядок>
+						<Источник Имя="ЮрФизЛицо" Вид="Реквизит" Тип="ПеречислениеСсылка.ЮрФизЛицо"/>
+						<Приемник Имя="ЮрФизЛицо" Вид="Реквизит" Тип="ПеречислениеСсылка.ЮрФизЛицо"/>
+						<КодПравилаКонвертации>ЮрФизЛицо                                         </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>15</Код>
+						<Наименование>ОГРН --&gt; РегистрационныйНомер</Наименование>
+						<Порядок>750</Порядок>
+						<Источник Имя="ОГРН" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="РегистрационныйНомер" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Группа>
+						<Код>16</Код>
+						<Наименование>--&gt; КонтактнаяИнформация</Наименование>
+						<Порядок>800</Порядок>
+						<ПолучитьИзВходящихДанных>true</ПолучитьИзВходящихДанных>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="КонтактнаяИнформация" Вид="ТабличнаяЧасть"/>
+						<Свойство Отключить="true">
+							<Код>17</Код>
+							<Наименование>--&gt; АдресЭП</Наименование>
+							<Порядок>50</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="АдресЭП" Вид="Реквизит" Тип="Строка"/>
+						</Свойство>
+						<Свойство>
+							<Код>18</Код>
+							<Наименование>--&gt; Вид</Наименование>
+							<Порядок>100</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="Вид" Вид="Реквизит" Тип="СправочникСсылка.ВидыКонтактнойИнформации"/>
+							<КодПравилаКонвертации>ВидыКонтактнойИнформации                          </КодПравилаКонвертации>
+						</Свойство>
+						<Свойство>
+							<Код>19</Код>
+							<Наименование>--&gt; ВидДляСписка</Наименование>
+							<Порядок>150</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="ВидДляСписка" Вид="Реквизит" Тип="СправочникСсылка.ВидыКонтактнойИнформации"/>
+							<КодПравилаКонвертации>ВидыКонтактнойИнформации                          </КодПравилаКонвертации>
+						</Свойство>
+						<Свойство Отключить="true">
+							<Код>20</Код>
+							<Наименование>--&gt; Город</Наименование>
+							<Порядок>200</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="Город" Вид="Реквизит" Тип="Строка"/>
+						</Свойство>
+						<Свойство Отключить="true">
+							<Код>21</Код>
+							<Наименование>--&gt; ДействуетС</Наименование>
+							<Порядок>250</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="ДействуетС" Вид="Реквизит" Тип="Дата"/>
+						</Свойство>
+						<Свойство Отключить="true">
+							<Код>22</Код>
+							<Наименование>--&gt; ДоменноеИмяСервера</Наименование>
+							<Порядок>300</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="ДоменноеИмяСервера" Вид="Реквизит" Тип="Строка"/>
+						</Свойство>
+						<Свойство>
+							<Код>23</Код>
+							<Наименование>--&gt; Значение</Наименование>
+							<Порядок>350</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="Значение" Вид="Реквизит" Тип="Строка"/>
+						</Свойство>
+						<Свойство Отключить="true">
+							<Код>24</Код>
+							<Наименование>--&gt; ЗначенияПолей</Наименование>
+							<Порядок>400</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="ЗначенияПолей" Вид="Реквизит" Тип="Строка"/>
+						</Свойство>
+						<Свойство Отключить="true">
+							<Код>25</Код>
+							<Наименование>--&gt; НомерТелефона</Наименование>
+							<Порядок>450</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="НомерТелефона" Вид="Реквизит" Тип="Строка"/>
+						</Свойство>
+						<Свойство Отключить="true">
+							<Код>26</Код>
+							<Наименование>--&gt; НомерТелефонаБезКодов</Наименование>
+							<Порядок>500</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="НомерТелефонаБезКодов" Вид="Реквизит" Тип="Строка"/>
+						</Свойство>
+						<Свойство>
+							<Код>27</Код>
+							<Наименование>--&gt; Представление</Наименование>
+							<Порядок>550</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="Представление" Вид="Реквизит" Тип="Строка"/>
+						</Свойство>
+						<Свойство Отключить="true">
+							<Код>28</Код>
+							<Наименование>--&gt; Регион</Наименование>
+							<Порядок>600</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="Регион" Вид="Реквизит" Тип="Строка"/>
+						</Свойство>
+						<Свойство Отключить="true">
+							<Код>29</Код>
+							<Наименование>--&gt; Страна</Наименование>
+							<Порядок>650</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="Страна" Вид="Реквизит" Тип="Строка"/>
+						</Свойство>
+						<Свойство>
+							<Код>30</Код>
+							<Наименование>--&gt; Тип</Наименование>
+							<Порядок>700</Порядок>
+							<Источник Имя="" Вид=""/>
+							<Приемник Имя="Тип" Вид="Реквизит" Тип="ПеречислениеСсылка.ТипыКонтактнойИнформации"/>
+							<КодПравилаКонвертации>ТипыКонтактнойИнформации                          </КодПравилаКонвертации>
+						</Свойство>
+					</Группа>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>СтраныМира</Код>
+				<Наименование>Справочник: Классификатор стран мира</Наименование>
+				<Порядок>1600</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.КлассификаторСтранМира</Источник>
+				<Приемник>СправочникСсылка.СтраныМира</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>КодАльфа2 --&gt; КодАльфа2</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="КодАльфа2" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КодАльфа2" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>КодАльфа3 --&gt; КодАльфа3</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="КодАльфа3" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="КодАльфа3" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>НаименованиеПолное --&gt; НаименованиеПолное</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+						<Приемник Имя="НаименованиеПолное" Вид="Реквизит" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>УчастникЕАЭС --&gt; УчастникЕАЭС</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="УчастникЕАЭС" Вид="Реквизит" Тип="Булево"/>
+						<Приемник Имя="УчастникЕАЭС" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>5</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Порядок>250</Порядок>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>6</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>300</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>7</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Порядок>350</Порядок>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ВидыКонтактнойИнформации</Код>
+				<Наименование>Справочник: Виды контактной информации</Наименование>
+				<Порядок>1650</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.ВидыКонтактнойИнформации</Источник>
+				<Приемник>СправочникСсылка.ВидыКонтактнойИнформации</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>Тип --&gt; Тип</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Тип" Вид="Реквизит" Тип="ПеречислениеСсылка.ТипыКонтактнойИнформации"/>
+						<Приемник Имя="Тип" Вид="Реквизит" Тип="ПеречислениеСсылка.ТипыКонтактнойИнформации"/>
+						<КодПравилаКонвертации>ТипыКонтактнойИнформации                          </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+		</Группа>
+		<Группа>
+			<Код>Перечисления</Код>
+			<Наименование>Перечисления</Наименование>
+			<Порядок>100</Порядок>
+			<Правило>
+				<Код>ЮрФизЛицо</Код>
+				<Наименование>Перечисление: Юр/Физлицо</Наименование>
+				<Порядок>50</Порядок>
+				<Источник>ПеречислениеСсылка.ЮрФизЛицо</Источник>
+				<Приемник>ПеречислениеСсылка.ЮрФизЛицо</Приемник>
+				<Свойства/>
+				<Значения>
+					<Значение>
+						<Код>1</Код>
+						<Наименование>ФизЛицо --&gt; ФизЛицо</Наименование>
+						<Порядок>50</Порядок>
+						<Источник>ФизЛицо</Источник>
+						<Приемник>ФизЛицо</Приемник>
+					</Значение>
+					<Значение>
+						<Код>2</Код>
+						<Наименование>ЮрЛицо --&gt; ЮрЛицо</Наименование>
+						<Порядок>100</Порядок>
+						<Источник>ЮрЛицо</Источник>
+						<Приемник>ЮрЛицо</Приемник>
+					</Значение>
+				</Значения>
+			</Правило>
+			<Правило>
+				<Код>ОтветственныеЛицаОрганизаций00001</Код>
+				<Наименование>Перечисление: Ответственные лица организаций</Наименование>
+				<Порядок>100</Порядок>
+				<Источник>ПеречислениеСсылка.ОтветственныеЛицаОрганизаций</Источник>
+				<Приемник>ПеречислениеСсылка.ОтветственныеЛицаОрганизаций</Приемник>
+				<Свойства/>
+				<Значения>
+					<Значение>
+						<Код>1</Код>
+						<Наименование>ГлавныйБухгалтер --&gt; ГлавныйБухгалтер</Наименование>
+						<Порядок>50</Порядок>
+						<Источник>ГлавныйБухгалтер</Источник>
+						<Приемник>ГлавныйБухгалтер</Приемник>
+					</Значение>
+					<Значение>
+						<Код>2</Код>
+						<Наименование>Исполнитель --&gt; Исполнитель</Наименование>
+						<Порядок>100</Порядок>
+						<Источник>Исполнитель</Источник>
+						<Приемник>Исполнитель</Приемник>
+					</Значение>
+					<Значение>
+						<Код>3</Код>
+						<Наименование>Кассир --&gt; Кассир</Наименование>
+						<Порядок>150</Порядок>
+						<Источник>Кассир</Источник>
+						<Приемник>Кассир</Приемник>
+					</Значение>
+					<Значение>
+						<Код>4</Код>
+						<Наименование>ОтветственныйЗаБухгалтерскиеРегистры --&gt; Ответстве</Наименование>
+						<Порядок>200</Порядок>
+						<Источник>ОтветственныйЗаБухгалтерскиеРегистры</Источник>
+						<Приемник>ОтветственныйЗаБухгалтерскиеРегистры</Приемник>
+					</Значение>
+					<Значение>
+						<Код>5</Код>
+						<Наименование>ОтветственныйЗаНалоговыеРегистры --&gt; Ответственный</Наименование>
+						<Порядок>250</Порядок>
+						<Источник>ОтветственныйЗаНалоговыеРегистры</Источник>
+						<Приемник>ОтветственныйЗаНалоговыеРегистры</Приемник>
+					</Значение>
+					<Значение>
+						<Код>6</Код>
+						<Наименование>Руководитель --&gt; Руководитель</Наименование>
+						<Порядок>300</Порядок>
+						<Источник>Руководитель</Источник>
+						<Приемник>Руководитель</Приемник>
+					</Значение>
+					<Значение>
+						<Код>7</Код>
+						<Наименование>РуководительКадровойСлужбы --&gt; РуководительКадрово</Наименование>
+						<Порядок>350</Порядок>
+						<Источник>РуководительКадровойСлужбы</Источник>
+						<Приемник>РуководительКадровойСлужбы</Приемник>
+					</Значение>
+					<Значение>
+						<Код>8</Код>
+						<Наименование>УполномоченныйПредставитель --&gt; УполномоченныйПред</Наименование>
+						<Порядок>400</Порядок>
+						<Источник>УполномоченныйПредставитель</Источник>
+						<Приемник>УполномоченныйПредставитель</Приемник>
+					</Значение>
+				</Значения>
+			</Правило>
+			<Правило>
+				<Код>ТипыСкладов</Код>
+				<Наименование>Перечисление: Виды складов</Наименование>
+				<Порядок>200</Порядок>
+				<Источник>ПеречислениеСсылка.ВидыСкладов</Источник>
+				<Приемник>ПеречислениеСсылка.ТипыСкладов</Приемник>
+				<Свойства/>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ТипыКонтактнойИнформации</Код>
+				<Наименование>Перечисление: Типы контактной информации</Наименование>
+				<Порядок>250</Порядок>
+				<Источник>ПеречислениеСсылка.ТипыКонтактнойИнформации</Источник>
+				<Приемник>ПеречислениеСсылка.ТипыКонтактнойИнформации</Приемник>
+				<Свойства/>
+				<Значения>
+					<Значение>
+						<Код>1</Код>
+						<Наименование>Адрес --&gt; Адрес</Наименование>
+						<Порядок>50</Порядок>
+						<Источник>Адрес</Источник>
+						<Приемник>Адрес</Приемник>
+					</Значение>
+					<Значение>
+						<Код>2</Код>
+						<Наименование>АдресЭлектроннойПочты --&gt; АдресЭлектроннойПочты</Наименование>
+						<Порядок>100</Порядок>
+						<Источник>АдресЭлектроннойПочты</Источник>
+						<Приемник>АдресЭлектроннойПочты</Приемник>
+					</Значение>
+					<Значение>
+						<Код>3</Код>
+						<Наименование>ВебСтраница --&gt; ВебСтраница</Наименование>
+						<Порядок>150</Порядок>
+						<Источник>ВебСтраница</Источник>
+						<Приемник>ВебСтраница</Приемник>
+					</Значение>
+					<Значение>
+						<Код>4</Код>
+						<Наименование>Другое --&gt; Другое</Наименование>
+						<Порядок>200</Порядок>
+						<Источник>Другое</Источник>
+						<Приемник>Другое</Приемник>
+					</Значение>
+					<Значение>
+						<Код>5</Код>
+						<Наименование>Телефон --&gt; Телефон</Наименование>
+						<Порядок>250</Порядок>
+						<Источник>Телефон</Источник>
+						<Приемник>Телефон</Приемник>
+					</Значение>
+					<Значение>
+						<Код>6</Код>
+						<Наименование>Факс --&gt; Факс</Наименование>
+						<Порядок>300</Порядок>
+						<Источник>Факс</Источник>
+						<Приемник>Факс</Приемник>
+					</Значение>
+				</Значения>
+			</Правило>
+		</Группа>
+		<Группа>
+			<Код>Планы видов характеристик</Код>
+			<Наименование>Планы видов характеристик</Наименование>
+			<Порядок>150</Порядок>
+			<Правило>
+				<Код>ДополнительныеРеквизитыИСведения</Код>
+				<Наименование>План видов характеристик: Свойства объектов</Наименование>
+				<Порядок>50</Порядок>
+				<ПослеЗагрузки>НаименованиеНабора = ПараметрыОбъекта.Получить("НаименованиеНабора");
+ТипЗначение = ПараметрыОбъекта.Получить("ТипЗначения");
+
+Если ЗначениеЗаполнено(ТипЗначение) Тогда
+	Попытка
+		Объект.ТипЗначения = Новый ОписаниеТипов(ТипЗначение);
+	Исключение
+	КонецПопытки;
+КонецЕсли;
+
+Если Объект.ЭтоДополнительноеСведение Тогда
+	Объект.ВидСвойства = Перечисления.ВидыСвойств.ДополнительныеСведения;
+	ТаблицаНабора = "ДополнительныеСведения";
+Иначе
+	Объект.ВидСвойства = Перечисления.ВидыСвойств.ДополнительныеРеквизиты;
+	ТаблицаНабора = "ДополнительныеРеквизиты";
+КонецЕсли;
+
+Если ЗначениеЗаполнено(НаименованиеНабора) Тогда
+	
+	НаборСвойств = УправлениеСвойствами.НаборСвойствПоИмени(НаименованиеНабора);
+	Объект.НаборСвойств = НаборСвойств;
+	
+	Объект.Записать();
+	ОбъектМодифицирован = Ложь;
+	
+	Если НаборСвойств[ТаблицаНабора].Найти(Объект.Ссылка, "Свойство") = Неопределено Тогда
+		НаборОбъект = НаборСвойств.ПолучитьОбъект();
+		НоваяСтрока = НаборОбъект[ТаблицаНабора].Добавить();
+		НоваяСтрока.Свойство = Объект.Ссылка;
+		НаборОбъект.Записать();
+	КонецЕсли;
+	
+КонецЕсли;</ПослеЗагрузки>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>ПланВидовХарактеристикСсылка.СвойстваОбъектов</Источник>
+				<Приемник>ПланВидовХарактеристикСсылка.ДополнительныеРеквизитыИСведения</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>--&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>1</Код>
+						<Наименование>--&gt; Заголовок</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Заголовок" Вид="Реквизит" Тип="Строка"/>
+						<ПередВыгрузкой>Значение = Источник.Наименование;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>5</Код>
+						<Наименование>--&gt; Виден</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Виден" Вид="Реквизит" Тип="Булево"/>
+						<ПередВыгрузкой>Значение = Истина;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>7</Код>
+						<Наименование>--&gt; Доступен</Наименование>
+						<Порядок>300</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="Доступен" Вид="Реквизит" Тип="Булево"/>
+						<ПередВыгрузкой>Значение = Истина;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>8</Код>
+						<Наименование>--&gt; ЭтоДополнительноеСведение</Наименование>
+						<Порядок>350</Порядок>
+						<ПолучитьИзВходящихДанных>true</ПолучитьИзВходящихДанных>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="ЭтоДополнительноеСведение" Вид="Реквизит" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>9</Код>
+						<Наименование>--&gt; НаименованиеНабора</Наименование>
+						<Порядок>400</Порядок>
+						<ПолучитьИзВходящихДанных>true</ПолучитьИзВходящихДанных>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="" Вид=""/>
+						<ИмяПараметраДляПередачи>НаименованиеНабора</ИмяПараметраДляПередачи>
+					</Свойство>
+					<Свойство>
+						<Код>11</Код>
+						<Наименование>--&gt; ТипЗначения</Наименование>
+						<Порядок>500</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="" Вид=""/>
+						<ИмяПараметраДляПередачи>ТипЗначения</ИмяПараметраДляПередачи>
+						<ПередВыгрузкой>Значение = Строка(Источник.ТипЗначения);</ПередВыгрузкой>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>СтатьиРасходов</Код>
+				<Наименование>Справочник: Статьи затрат</Наименование>
+				<Порядок>100</Порядок>
+				<СинхронизироватьПоИдентификатору>true</СинхронизироватьПоИдентификатору>
+				<ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>true</ПродолжитьПоискПоПолямПоискаЕслиПоИдентификаторуНеНашли>
+				<Источник>СправочникСсылка.СтатьиЗатрат</Источник>
+				<Приемник>ПланВидовХарактеристикСсылка.СтатьиРасходов</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>6</Код>
+						<Наименование>ВидРасходовНУ --&gt; ВидРасходов</Наименование>
+						<Источник Имя="ВидРасходовНУ" Вид="Реквизит" Тип="ПеречислениеСсылка.ВидыРасходовНУ"/>
+						<Приемник Имя="ВидРасходов" Вид="Реквизит" Тип="ПеречислениеСсылка.ВидыРасходовНУ"/>
+					</Свойство>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>Код --&gt; Код</Наименование>
+						<Источник Имя="Код" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Код" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство Поиск="true">
+						<Код>2</Код>
+						<Наименование>Наименование --&gt; Наименование</Наименование>
+						<Источник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+						<Приемник Имя="Наименование" Вид="Свойство" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ПометкаУдаления --&gt; ПометкаУдаления</Наименование>
+						<Источник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ПометкаУдаления" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>Родитель --&gt; Родитель</Наименование>
+						<Источник Имя="Родитель" Вид="Свойство" Тип="СправочникСсылка.СтатьиЗатрат"/>
+						<Приемник Имя="Родитель" Вид="Свойство" Тип="ПланВидовХарактеристикСсылка.СтатьиРасходов"/>
+					</Свойство>
+					<Свойство Поиск="true" Обязательное="true">
+						<Код>5</Код>
+						<Наименование>ЭтоГруппа --&gt; ЭтоГруппа</Наименование>
+						<Источник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+						<Приемник Имя="ЭтоГруппа" Вид="Свойство" Тип="Булево"/>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+		</Группа>
+		<Группа>
+			<Код>Регистры сведений</Код>
+			<Наименование>Регистры сведений</Наименование>
+			<Порядок>200</Порядок>
+			<Правило>
+				<Код>ДополнительныеСведения</Код>
+				<Наименование>Регистр сведений: Значения свойств объектов</Наименование>
+				<Порядок>50</Порядок>
+				<Источник>РегистрСведенийЗапись.ЗначенияСвойствОбъектов</Источник>
+				<Приемник>РегистрСведенийЗапись.ДополнительныеСведения</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>Объект --&gt; Объект</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Объект" Вид="Измерение"/>
+						<Приемник Имя="Объект" Вид="Измерение"/>
+						<ПередВыгрузкой>Если ТипЗнч(Источник) = Тип("Структура") Тогда
+	Если ТипЗнч(Источник.Объект) = Тип("СправочникСсылка.Номенклатура") Тогда
+		ИмяПКО = "Номенклатура";
+	ИначеЕсли ТипЗнч(Источник.Объект) = Тип("СправочникСсылка.ФизическиеЛица") Тогда
+		ИмяПКО = "ФизическиеЛица";	
+	КонецЕсли;
+ИначеЕсли ТипЗнч(Источник) = Тип("СправочникСсылка.Номенклатура") Тогда
+		ИмяПКО = "Номенклатура";
+ИначеЕсли ТипЗнч(Источник) = Тип("СправочникСсылка.ФизическиеЛица") Тогда
+		ИмяПКО = "ФизическиеЛица";
+КонецЕсли;
+
+// Используется для проверки на повторную выгрузку Доп реквизита у ПКО через ВыгрузитьПоПравилу(). 
+// При выгрузке без этой проверки 1С закрывается без ошибок, т.к. возникает зацикливание выгрузки.
+ИсходящиеДанные = Новый Структура;
+ИсходящиеДанные.Вставить("НеВыгружатьПовторно", Истина);</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>Свойство --&gt; Свойство</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="Свойство" Вид="Измерение" Тип="ПланВидовХарактеристикСсылка.СвойстваОбъектов"/>
+						<Приемник Имя="Свойство" Вид="Измерение" Тип="ПланВидовХарактеристикСсылка.ДополнительныеРеквизитыИСведения"/>
+						<КодПравилаКонвертации>ДополнительныеРеквизитыИСведения                  </КодПравилаКонвертации>
+						<ПередВыгрузкой>ИсходящиеДанные = Новый Структура;
+
+Если ТипЗнч(Источник) = Тип("Структура") Тогда
+	Если ТипЗнч(Источник.Объект) = Тип("СправочникСсылка.Номенклатура") Тогда
+		ИсходящиеДанные.Вставить("НаименованиеНабора", "Справочник_Номенклатура_Общие");
+		ИсходящиеДанные.Вставить("ЭтоДополнительноеСведение", Истина);
+	ИначеЕсли ТипЗнч(Источник.Объект) = Тип("СправочникСсылка.ФизическиеЛица") Тогда
+		ИсходящиеДанные.Вставить("НаименованиеНабора", "Справочник_ФизическиеЛица");
+		ИсходящиеДанные.Вставить("ЭтоДополнительноеСведение", Ложь);	
+	КонецЕсли;
+ИначеЕсли ТипЗнч(Источник) = Тип("СправочникСсылка.Номенклатура") Тогда
+	ИсходящиеДанные.Вставить("НаименованиеНабора", "Справочник_Номенклатура_Общие");
+	ИсходящиеДанные.Вставить("ЭтоДополнительноеСведение", Истина);
+ИначеЕсли ТипЗнч(Источник) = Тип("СправочникСсылка.ФизическиеЛица") Тогда 
+	ИсходящиеДанные.Вставить("НаименованиеНабора", "Справочник_ФизическиеЛица");
+	ИсходящиеДанные.Вставить("ЭтоДополнительноеСведение", Ложь);
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>Значение --&gt; Значение</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="Значение" Вид="Ресурс"/>
+						<Приемник Имя="Значение" Вид="Ресурс"/>
+						<ПередВыгрузкой>Если ТипЗнч(Источник) = Тип("Структура") Тогда
+	Если ТипЗнч(Источник.Значение) = Тип("СправочникСсылка.ЗначенияСвойствОбъектов") Тогда
+		ИмяПКО = "ЗначенияСвойствОбъектовСправочник";
+	ИначеЕсли ТипЗнч(Источник.Значение) = Тип("СправочникСсылка.Склады") Тогда
+		ИмяПКО = "Склады";	
+	КонецЕсли;
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+			<Правило>
+				<Код>ДокументыФизическихЛиц</Код>
+				<Наименование>Регистр сведений: Паспортные данные физического лица</Наименование>
+				<Порядок>100</Порядок>
+				<НеЗапоминатьВыгруженные>true</НеЗапоминатьВыгруженные>
+				<Источник>РегистрСведенийЗапись.ПаспортныеДанныеФизЛиц</Источник>
+				<Приемник>РегистрСведенийЗапись.ДокументыФизическихЛиц</Приемник>
+				<Свойства>
+					<Свойство>
+						<Код>1</Код>
+						<Наименование>Период --&gt; Период</Наименование>
+						<Порядок>50</Порядок>
+						<Источник Имя="Период" Вид="Свойство" Тип="Дата"/>
+						<Приемник Имя="Период" Вид="Свойство" Тип="Дата"/>
+					</Свойство>
+					<Свойство>
+						<Код>2</Код>
+						<Наименование>ФизЛицо --&gt; Физлицо</Наименование>
+						<Порядок>100</Порядок>
+						<Источник Имя="ФизЛицо" Вид="Измерение"/>
+						<Приемник Имя="Физлицо" Вид="Измерение"/>
+						<КодПравилаКонвертации>ФизическиеЛица                                    </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>3</Код>
+						<Наименование>ДокументВид --&gt; ВидДокумента</Наименование>
+						<Порядок>150</Порядок>
+						<Источник Имя="ДокументВид" Вид="Ресурс" Тип="СправочникСсылка.ДокументыУдостоверяющиеЛичность"/>
+						<Приемник Имя="ВидДокумента" Вид="Измерение" Тип="СправочникСсылка.ВидыДокументовФизическихЛиц"/>
+						<КодПравилаКонвертации>ВидыДокументовФизическихЛиц                       </КодПравилаКонвертации>
+					</Свойство>
+					<Свойство>
+						<Код>4</Код>
+						<Наименование>ДокументДатаВыдачи --&gt; ДатаВыдачи</Наименование>
+						<Порядок>200</Порядок>
+						<Источник Имя="ДокументДатаВыдачи" Вид="Ресурс" Тип="Дата"/>
+						<Приемник Имя="ДатаВыдачи" Вид="Ресурс" Тип="Дата"/>
+					</Свойство>
+					<Свойство>
+						<Код>5</Код>
+						<Наименование>ДокументКемВыдан --&gt; КемВыдан</Наименование>
+						<Порядок>250</Порядок>
+						<Источник Имя="ДокументКемВыдан" Вид="Ресурс" Тип="Строка"/>
+						<Приемник Имя="КемВыдан" Вид="Ресурс" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>6</Код>
+						<Наименование>ДокументКодПодразделения --&gt; КодПодразделения</Наименование>
+						<Порядок>300</Порядок>
+						<Источник Имя="ДокументКодПодразделения" Вид="Ресурс" Тип="Строка"/>
+						<Приемник Имя="КодПодразделения" Вид="Ресурс" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>7</Код>
+						<Наименование>ДокументНомер --&gt; Номер</Наименование>
+						<Порядок>350</Порядок>
+						<Источник Имя="ДокументНомер" Вид="Ресурс" Тип="Строка"/>
+						<Приемник Имя="Номер" Вид="Ресурс" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>8</Код>
+						<Наименование>ДокументСерия --&gt; Серия</Наименование>
+						<Порядок>400</Порядок>
+						<Источник Имя="ДокументСерия" Вид="Ресурс" Тип="Строка"/>
+						<Приемник Имя="Серия" Вид="Ресурс" Тип="Строка"/>
+					</Свойство>
+					<Свойство>
+						<Код>9</Код>
+						<Наименование>--&gt; ЯвляетсяДокументомУдостоверяющимЛичность</Наименование>
+						<Порядок>450</Порядок>
+						<Источник Имя="" Вид=""/>
+						<Приемник Имя="ЯвляетсяДокументомУдостоверяющимЛичность" Вид="Ресурс" Тип="Булево"/>
+						<ПередВыгрузкой>Если Источник.ДокументВид = Справочники.ДокументыУдостоверяющиеЛичность.ИМНС21 Тогда
+	Значение = Истина;
+КонецЕсли;</ПередВыгрузкой>
+					</Свойство>
+				</Свойства>
+				<Значения/>
+			</Правило>
+		</Группа>
+	</ПравилаКонвертацииОбъектов>
+	<ПравилаВыгрузкиДанных>
+		<Группа Отключить="false">
+			<Код>Справочники</Код>
+			<Наименование>Справочники</Наименование>
+			<Порядок>50</Порядок>
+			<Правило Отключить="true">
+				<Код>Организации</Код>
+				<Наименование>Организации</Наименование>
+				<Порядок>50</Порядок>
+				<КодПравилаКонвертации>Организации                                       </КодПравилаКонвертации>
+				<СпособОтбораДанных>ПроизвольныйАлгоритм</СпособОтбораДанных>
+				<ОбъектВыборки>СправочникСсылка.Организации</ОбъектВыборки>
+			</Правило>
+			<Правило Отключить="false">
+				<Код>ВидыЦен</Код>
+				<Наименование>Типы цен номенклатуры</Наименование>
+				<Порядок>60</Порядок>
+				<КодПравилаКонвертации>ВидыЦен                                           </КодПравилаКонвертации>
+				<СпособОтбораДанных>ПроизвольныйАлгоритм</СпособОтбораДанных>
+				<ОбъектВыборки>СправочникСсылка.ТипыЦенНоменклатуры</ОбъектВыборки>
+				<ПередОбработкойПравила>// Перечень типов цен УПП не согласован (ЛТ ЕН-010). До согласования объекты не выгружаются.
+МассивНаименований = Новый Массив;
+
+Запрос = Новый Запрос;
+Запрос.Текст = 
+"ВЫБРАТЬ
+|	ТипыЦенНоменклатуры.Ссылка
+|ИЗ
+|	Справочник.ТипыЦенНоменклатуры КАК ТипыЦенНоменклатуры
+|ГДЕ
+|	ТипыЦенНоменклатуры.Наименование В (&amp;Наименования)
+|	И НЕ ТипыЦенНоменклатуры.ПометкаУдаления"
+
+Запрос.УстановитьПараметр("Наименования", МассивНаименований);
+
+РезультатЗапроса = Запрос.Выполнить();
+Выборка = РезультатЗапроса.Выбрать();
+ВыборкаДанных = Новый Массив;
+Пока Выборка.Следующий() Цикл
+	ВыборкаДанных.Добавить(Выборка.Ссылка);
+КонецЦикла;</ПередОбработкойПравила>
+			</Правило>
+			<Правило Отключить="false">
+				<Код>БанковскиеСчета</Код>
+				<Наименование>БанковскиеСчета</Наименование>
+				<Порядок>100</Порядок>
+				<КодПравилаКонвертации>БанковскиеСчетаОрганизаций                        </КодПравилаКонвертации>
+				<СпособОтбораДанных>ПроизвольныйАлгоритм</СпособОтбораДанных>
+				<ОбъектВыборки>СправочникСсылка.БанковскиеСчета</ОбъектВыборки>
+				<ПередОбработкойПравила>СтрСоединения = СтрокаСоединенияИнформационнойБазы();
+ИмяБазы = НСтр(СтрСоединения, "Ref");
+
+Если ИмяБазы = "upp_pe_Implementation" Тогда
+	ВыгружаемаяОрганизация = "ПРАМО - ЭЛЕКТРО ООО";
+
+ИначеЕсли ИмяБазы = "upp_uk_Implementation" Тогда
+	ВыгружаемаяОрганизация = "ООО ""УК ""ЭЛТРА""";
+Иначе
+	ВыгружаемаяОрганизация = "";
+КонецЕсли;
+
+Запрос = Новый Запрос;
+Запрос.Текст = 
+"ВЫБРАТЬ
+|	*
+|ИЗ
+|	Справочник.Организации КАК Организации
+|ГДЕ
+|	Организации.Наименование = &amp;Наименование";
+
+Запрос.УстановитьПараметр("Наименование", ВыгружаемаяОрганизация);
+
+РезультатЗапроса = Запрос.Выполнить();
+ВыборкаДетальныеЗаписи = РезультатЗапроса.Выбрать();
+ВыборкаДетальныеЗаписи.Следующий();
+
+Параметры.Вставить("ВыгружаемаяОрганизацияСсылка", ВыборкаДетальныеЗаписи.Ссылка);
+
+Запрос = Новый Запрос;
+Запрос.Текст = 
+"ВЫБРАТЬ
+|	*
+|ИЗ
+|	Справочник.БанковскиеСчета 
+|ГДЕ
+|	НЕ ПометкаУдаления
+|	И Владелец = &amp;Организация";
+
+Запрос.УстановитьПараметр("Организация", Параметры.ВыгружаемаяОрганизацияСсылка);
+
+ВыборкаДанных = Запрос;</ПередОбработкойПравила>
+			</Правило>
+			<Правило Отключить="false">
+				<Код>Склады</Код>
+				<Наименование>Склады</Наименование>
+				<Порядок>150</Порядок>
+				<КодПравилаКонвертации>Склады                                            </КодПравилаКонвертации>
+				<СпособОтбораДанных>ПроизвольныйАлгоритм</СпособОтбораДанных>
+				<ОбъектВыборки>СправочникСсылка.Склады</ОбъектВыборки>
+				<ПередОбработкойПравила>Массив = Новый Массив;
+Массив.Добавить("16 ВП");
+Массив.Добавить("Склады 15 счета");
+Параметры.Вставить("ГруппыСкладов", Массив);
+
+Запрос = Новый Запрос;
+Запрос.Текст = 
+"ВЫБРАТЬ
+|	*
+|ИЗ
+|	Справочник.Склады КАК Склады
+|ГДЕ
+|	Склады.Родитель.Наименование НЕ В (&amp;ГруппыСкладов)
+|";
+
+Запрос.УстановитьПараметр("ГруппыСкладов", Параметры.ГруппыСкладов);
+
+ВыборкаДанных = Запрос;</ПередОбработкойПравила>
+			</Правило>
+			<Правило Отключить="false">
+				<Код>Номенклатура</Код>
+				<Наименование>Номенклатура</Наименование>
+				<Порядок>200</Порядок>
+				<КодПравилаКонвертации>Номенклатура                                      </КодПравилаКонвертации>
+				<СпособОтбораДанных>ПроизвольныйАлгоритм</СпособОтбораДанных>
+				<ОбъектВыборки>СправочникСсылка.Номенклатура</ОбъектВыборки>
+				<ПередОбработкойПравила>Запрос = Новый Запрос;
+Запрос.Текст = 
+"ВЫБРАТЬ РАЗЛИЧНЫЕ
+|	ТоварыОрганизацийОстаткиИОбороты.Номенклатура
+|ПОМЕСТИТЬ втОстаткиИОборотыТоваровОрганизаций
+|ИЗ
+|	РегистрНакопления.ТоварыОрганизаций.ОстаткиИОбороты(ДОБАВИТЬКДАТЕ(&amp;ДатаОстатков, ГОД, -1), &amp;ДатаОстатков, , , ) КАК ТоварыОрганизацийОстаткиИОбороты
+|
+|СГРУППИРОВАТЬ ПО
+|	ТоварыОрганизацийОстаткиИОбороты.Номенклатура
+|
+|ОБЪЕДИНИТЬ ВСЕ
+|
+|ВЫБРАТЬ РАЗЛИЧНЫЕ
+|	МатериалыВПроизводствеОстаткиИОбороты.Затрата
+|ИЗ
+|	РегистрНакопления.МатериалыВПроизводстве.ОстаткиИОбороты(ДОБАВИТЬКДАТЕ(&amp;ДатаОстатков, ГОД, -1), &amp;ДатаОстатков, , , ) КАК МатериалыВПроизводствеОстаткиИОбороты
+|;
+|
+|////////////////////////////////////////////////////////////////////////////////
+|ВЫБРАТЬ
+|	втОстаткиИОборотыТоваровОрганизаций.Номенклатура КАК Ссылка
+|ИЗ
+|	втОстаткиИОборотыТоваровОрганизаций КАК втОстаткиИОборотыТоваровОрганизаций
+|
+|СГРУППИРОВАТЬ ПО
+|	втОстаткиИОборотыТоваровОрганизаций.Номенклатура"; 
+
+Запрос.УстановитьПараметр("ДатаОстатков", Параметры.ДатаОстатков);
+
+РезультатЗапроса = Запрос.Выполнить();
+
+ВыборкаДанных = Новый Массив;
+
+Выборка = РезультатЗапроса.Выбрать();
+Пока Выборка.Следующий() Цикл
+	ВыборкаДанных.Добавить(Выборка.Ссылка);
+КонецЦикла;</ПередОбработкойПравила>
+			</Правило>
+			<Правило Отключить="false">
+				<Код>ФизическиеЛица</Код>
+				<Наименование>Физические лица</Наименование>
+				<Порядок>250</Порядок>
+				<КодПравилаКонвертации>ФизическиеЛица                                    </КодПравилаКонвертации>
+				<СпособОтбораДанных>ПроизвольныйАлгоритм</СпособОтбораДанных>
+				<ОбъектВыборки>СправочникСсылка.ФизическиеЛица</ОбъектВыборки>
+				<ПередОбработкойПравила>ГруппаВодители = Справочники.ФизическиеЛица.НайтиПоНаименованию("Водители");
+
+Запрос = Новый Запрос;
+Запрос.Текст = 
+"ВЫБРАТЬ
+|	ФизическиеЛица.Ссылка
+|ИЗ
+|	Справочник.ФизическиеЛица КАК ФизическиеЛица
+|ГДЕ
+|	ФизическиеЛица.Родитель = &amp;ГруппаВодители";
+
+Запрос.УстановитьПараметр("ГруппаВодители", ГруппаВодители);
+
+РезультатЗапроса = Запрос.Выполнить();
+
+ВыборкаДетальныеЗаписи = РезультатЗапроса.Выбрать();
+ВыборкаДанных = Новый Массив;
+Пока ВыборкаДетальныеЗаписи.Следующий() Цикл
+	ВыборкаДанных.Добавить(ВыборкаДетальныеЗаписи.Ссылка);
+КонецЦикла;
+
+// Документы физических лиц
+Запрос = Новый Запрос;
+Запрос.Текст = 
+"ВЫБРАТЬ
+|	ПаспортныеДанныеФизЛиц.Период,
+|	ПаспортныеДанныеФизЛиц.ФизЛицо,
+|	ПаспортныеДанныеФизЛиц.ДокументВид,
+|	ПаспортныеДанныеФизЛиц.ДокументСерия,
+|	ПаспортныеДанныеФизЛиц.ДокументНомер,
+|	ПаспортныеДанныеФизЛиц.ДокументДатаВыдачи,
+|	ПаспортныеДанныеФизЛиц.ДокументКемВыдан,
+|	ПаспортныеДанныеФизЛиц.ДокументКодПодразделения
+|ИЗ
+|	РегистрСведений.ПаспортныеДанныеФизЛиц КАК ПаспортныеДанныеФизЛиц
+|ГДЕ
+|	ПаспортныеДанныеФизЛиц.ФизЛицо В (&amp;СписокФизЛиц)";
+
+Запрос.УстановитьПараметр("СписокФизЛиц", ВыборкаДанных);
+
+РезультатЗапроса = Запрос.Выполнить();
+
+Выборка = РезультатЗапроса.Выбрать();
+
+Пока Выборка.Следующий() Цикл
+	
+	СтруктураИсточника = Новый Структура;
+	СтруктураИсточника.Вставить("Период", Выборка.Период);
+	СтруктураИсточника.Вставить("ФизЛицо", Выборка.ФизЛицо);
+	СтруктураИсточника.Вставить("ДокументВид", Выборка.ДокументВид);
+	СтруктураИсточника.Вставить("ДокументСерия", Выборка.ДокументСерия);
+	СтруктураИсточника.Вставить("ДокументНомер", Выборка.ДокументНомер);
+	СтруктураИсточника.Вставить("ДокументДатаВыдачи", Выборка.ДокументДатаВыдачи);
+	СтруктураИсточника.Вставить("ДокументКемВыдан", Выборка.ДокументКемВыдан);
+	СтруктураИсточника.Вставить("ДокументКодПодразделения", Выборка.ДокументКодПодразделения);
+	
+	ВыгрузитьПоПравилу(СтруктураИсточника, , , , "ДокументыФизическихЛиц");
+	
+КонецЦикла;</ПередОбработкойПравила>
+			</Правило>
+			<Правило Отключить="true">
+				<Код>Контрагенты</Код>
+				<Наименование>Контрагенты</Наименование>
+				<Порядок>300</Порядок>
+				<КодПравилаКонвертации>Контрагенты                                       </КодПравилаКонвертации>
+				<СпособОтбораДанных>ПроизвольныйАлгоритм</СпособОтбораДанных>
+				<ОбъектВыборки>СправочникСсылка.Контрагенты</ОбъектВыборки>
+				<ПередОбработкойПравила>Запрос = Новый Запрос;
+Запрос.Текст = 
+"ВЫБРАТЬ РАЗЛИЧНЫЕ
+|	РасчетыСКонтрагентамиОстаткиИОбороты.Контрагент
+|ИЗ
+|	РегистрНакопления.РасчетыСКонтрагентами.ОстаткиИОбороты(&amp;ДатаНачала, &amp;ДатаОстатков, , , ) КАК РасчетыСКонтрагентамиОстаткиИОбороты";
+
+Запрос.УстановитьПараметр("ДатаНачала", Дата(2023, 1, 1));
+Запрос.УстановитьПараметр("ДатаОстатков", Параметры.ДатаОстатков);
+
+РезультатЗапроса = Запрос.Выполнить();
+
+Выборка = РезультатЗапроса.Выбрать();
+
+ВыборкаДанных = Новый Массив;
+
+Пока Выборка.Следующий() Цикл
+	
+	ВыборкаДанных.Добавить(Выборка.Контрагент);
+	
+КонецЦикла;</ПередОбработкойПравила>
+			</Правило>
+		</Группа>
+		<Группа Отключить="false">
+			<Код>РегистрыСведений</Код>
+			<Наименование>РегистрыСведений</Наименование>
+			<Порядок>100</Порядок>
+			<Правило Отключить="false">
+				<Код>ОтветственныеЛицаОрганизаций</Код>
+				<Наименование>ОтветственныеЛицаОрганизаций</Наименование>
+				<Порядок>50</Порядок>
+				<КодПравилаКонвертации>ОтветственныеЛицаОрганизаций                      </КодПравилаКонвертации>
+				<СпособОтбораДанных>ПроизвольныйАлгоритм</СпособОтбораДанных>
+				<ОбъектВыборки>РегистрСведенийЗапись.ОтветственныеЛицаОрганизаций</ОбъектВыборки>
+				<ПередОбработкойПравила>Запрос = Новый Запрос;
+Запрос.Текст = 
+"ВЫБРАТЬ
+|	ОтветственныеЛицаОрганизацийСрезПоследних.Период,
+|	ОтветственныеЛицаОрганизацийСрезПоследних.СтруктурнаяЕдиница,
+|	ОтветственныеЛицаОрганизацийСрезПоследних.ОтветственноеЛицо,
+|	ОтветственныеЛицаОрганизацийСрезПоследних.ФизическоеЛицо,
+|	ОтветственныеЛицаОрганизацийСрезПоследних.Должность,
+|	ОтветственныеЛицаОрганизацийСрезПоследних.Приказ
+|ИЗ
+|	РегистрСведений.ОтветственныеЛицаОрганизаций.СрезПоследних(, СтруктурнаяЕдиница = &amp;Организация) КАК ОтветственныеЛицаОрганизацийСрезПоследних";
+
+Запрос.УстановитьПараметр("Организация", Параметры.ВыгружаемаяОрганизацияСсылка);
+
+ВыборкаДанных = Запрос;</ПередОбработкойПравила>
+			</Правило>
+		</Группа>
+	</ПравилаВыгрузкиДанных>
+	<ПравилаОчисткиДанных/>
+	<Алгоритмы>
+		<Алгоритм Имя="ВыгрузкаДопРеквизитовИСведений" ИспользуетсяПриЗагрузке="false">
+			<Текст>Если Не Источник.ЭтоГруппа Тогда
+	
+	НеВыгружатьПовторно = Ложь;
+	Если ВходящиеДанные &lt;&gt; Неопределено Тогда
+		ВходящиеДанные.Свойство("НеВыгружатьПовторно", НеВыгружатьПовторно);
+	КонецЕсли; 
+	Если НеВыгружатьПовторно = Неопределено Тогда
+		НеВыгружатьПовторно = Ложь;
+	КонецЕсли;
+	
+	СписокДопСведенийИРеквизитовКВыгрузке = Параметры.СписокДопСведенийИРеквизитовКВыгрузке;
+	ДопСвойства = Новый Соответствие;
+	
+	Запрос = Новый Запрос;
+	Запрос.Текст = 
+	"ВЫБРАТЬ
+	|	ЗначенияСвойствОбъектов.Свойство,
+	|	ЗначенияСвойствОбъектов.Значение
+	|ИЗ
+	|	РегистрСведений.ЗначенияСвойствОбъектов КАК ЗначенияСвойствОбъектов
+	|ГДЕ
+	|	ЗначенияСвойствОбъектов.Объект В (&amp;МассивОбъектов)";
+	
+	МассивОбъектов = Новый Массив;
+	МассивОбъектов.Добавить(Источник);
+	Запрос.УстановитьПараметр("МассивОбъектов", Источник);
+	
+	РезультатЗапроса = Запрос.Выполнить();
+	
+	ВыборкаДетальныеЗаписи = РезультатЗапроса.Выбрать();
+	
+	Пока ВыборкаДетальныеЗаписи.Следующий() Цикл
+		
+		Если Не ЗначениеЗаполнено(ВыборкаДетальныеЗаписи.Значение) Тогда
+			Продолжить;
+		КонецЕсли;
+		
+		ДопСвойства.Вставить(ВыборкаДетальныеЗаписи.Свойство, ВыборкаДетальныеЗаписи.Значение);
+		
+		Если СписокДопСведенийИРеквизитовКВыгрузке.Найти(ВыборкаДетальныеЗаписи.Свойство) &lt;&gt; Неопределено И НЕ НеВыгружатьПовторно Тогда
+			СтруктураИсточника = Новый Структура;
+			СтруктураИсточника.Вставить("Объект", Источник);
+			СтруктураИсточника.Вставить("Свойство", ВыборкаДетальныеЗаписи.Свойство);
+			СтруктураИсточника.Вставить("Значение", ВыборкаДетальныеЗаписи.Значение); 
+			ВыгрузитьПоПравилу(СтруктураИсточника, , , , "ДополнительныеСведения");
+		КонецЕсли;
+		
+	КонецЦикла;
+	
+	Если ВходящиеДанные = Неопределено Тогда
+		ВходящиеДанные = Новый Структура;
+	КонецЕсли;
+	
+	ВходящиеДанные.Вставить("ДопСвойства", ДопСвойства);
+	
+КонецЕсли;</Текст>
+			<Параметры>Источник, ВходящиеДанные</Параметры>
+		</Алгоритм>
+		<Алгоритм Имя="НаименованиеСтавкиНДС" ИспользуетсяПриЗагрузке="false">
+			<Текст>Если ЗначениеСтавки = Перечисления.СтавкиНДС.НДС20 Тогда
+	НаименованиеСтавки = "20%";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.НДС20_120 Тогда
+	НаименованиеСтавки = "20/120";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.НДС10 Тогда
+	НаименованиеСтавки = "10%";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.НДС10_110 Тогда
+	НаименованиеСтавки = "10/110";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.НДС0 Тогда
+	НаименованиеСтавки = "0%";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.БезНДС Тогда
+	НаименованиеСтавки = "Без НДС";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.НДС18 Тогда
+	НаименованиеСтавки = "18%";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.НДС18_118 Тогда
+	НаименованиеСтавки = "18/118";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.НДС5 Тогда
+	НаименованиеСтавки = "5%";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.НДС5_105 Тогда
+	НаименованиеСтавки = "5/105";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.НДС7 Тогда
+	НаименованиеСтавки = "7%";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.НДС7_107 Тогда
+	НаименованиеСтавки = "=7/107";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.НДС22 Тогда
+	НаименованиеСтавки = "22%";
+ИначеЕсли ЗначениеСтавки = Перечисления.СтавкиНДС.НДС22_122 Тогда
+	НаименованиеСтавки = "22/122";
+КонецЕсли;</Текст>
+			<Параметры>НаименованиеСтавки, ЗначениеСтавки</Параметры>
+		</Алгоритм>
+		<Алгоритм Имя="ПоискСхемыОбеспечения" ИспользуетсяПриЗагрузке="true">
+			<Текст>СхемаОбеспечения = Справочники.СхемыОбеспечения.НайтиПоНаименованию(НаименованиеСхемы);
+Если Не ЗначениеЗаполнено(СхемаОбеспечения) Тогда
+	НоваяСхема = Справочники.СхемыОбеспечения.СоздатьЭлемент();
+	НоваяСхема.Наименование = НаименованиеСхемы;
+	НоваяСхема.Записать();
+	СхемаОбеспечения = НоваяСхема.Ссылка;
+КонецЕсли;</Текст>
+			<Параметры>НаименованиеСхемы, СхемаОбеспечения</Параметры>
+		</Алгоритм>
+		<Алгоритм Имя="СцепкаДляПоискаРодителя" ИспользуетсяПриЗагрузке="false">
+			<Текст>Если Не Источник.ЭтоГруппа Тогда
+	
+	Запрос = Новый Запрос;
+	Запрос.Текст = 
+	"ВЫБРАТЬ
+	|	Номенклатура.Родитель.Наименование КАК Группа5,
+	|	Номенклатура.Родитель.Родитель.Наименование КАК Группа4,
+	|	Номенклатура.Родитель.Родитель.Родитель.Наименование КАК Группа3,
+	|	Номенклатура.Родитель.Родитель.Родитель.Родитель.Наименование КАК Группа2,
+	|	Номенклатура.Родитель.Родитель.Родитель.Родитель.Родитель.Наименование КАК Группа1
+	|ИЗ
+	|	Справочник.Номенклатура КАК Номенклатура
+	|ГДЕ
+	|	Номенклатура.Ссылка = &amp;Ссылка";
+	
+	Запрос.УстановитьПараметр("Ссылка", Источник);
+	
+	РезультатЗапроса = Запрос.Выполнить();
+	
+	Выборка = РезультатЗапроса.Выбрать();
+	
+	Если ВходящиеДанные = Неопределено Тогда
+		ВходящиеДанные = Новый Структура;
+	КонецЕсли;
+	
+	Если Выборка.Следующий() Тогда
+		МассивСтрок = Новый Массив;
+		МассивСтрок.Добавить(СокрЛП(Выборка.Группа1)); 
+		МассивСтрок.Добавить(СокрЛП(Выборка.Группа2));
+		МассивСтрок.Добавить(СокрЛП(Выборка.Группа3));
+		МассивСтрок.Добавить(СокрЛП(Выборка.Группа4));
+		МассивСтрок.Добавить(СокрЛП(Выборка.Группа5));
+		
+		Сцепка = СтрСоединить(МассивСтрок);
+		
+		ВходящиеДанные.Вставить("Сцепка", Сцепка); 
+	КонецЕсли;
+	
+КонецЕсли;</Текст>
+			<Параметры>Источник, ВходящиеДанные</Параметры>
+		</Алгоритм>
+	</Алгоритмы>
+	<Запросы/>
+</ПравилаОбмена>
