@@ -372,6 +372,7 @@ class Merger:
         self.edits = []
         self.items = []
         self.counts = defaultdict(int)
+        self.applied = []          # [(ID, 'mine'|'develop')] — решения из decisions.txt
 
     # --- вывод ---
     def _replace(self, node_a, node_b):
@@ -394,8 +395,10 @@ class Merger:
     def _decided(self, path, item):
         value = self.decisions.get(item.id) or self.decisions.get(path)
         if value in ("mine", "my", "branch"):
+            self.applied.append((item.id, "mine"))
             return "mine"
         if value in ("develop", "theirs", "keep"):
+            self.applied.append((item.id, "develop"))
             return "develop"
         return None
 
@@ -697,13 +700,28 @@ def build_report(merger, out_path, decisions_path, result_path):
     with open(out_path, "w", encoding="utf-8-sig") as handle:
         handle.write("\n".join(L) + "\n")
 
+    # decisions.txt: перезаписываем шаблон, НО сохраняем решения пользователя
+    # (раскомментированные строки «ID = mine/develop») и не теряем их.
+    chosen = load_decisions(decisions_path)
+    need_ids = {item.id for item in groups.get("need", [])}
     with open(decisions_path, "w", encoding="utf-8") as handle:
-        handle.write("# Спорные блоки: уберите '#' и поставьте '= mine', чтобы взять свою версию\n")
-        handle.write("# Формат: <ID> = mine | develop\n")
+        handle.write("# Спорные блоки: уберите '#' в начале строки, чтобы взять свою версию\n")
+        handle.write("# Формат: <ID> = mine | develop   (комментарий после значения допустим)\n")
         handle.write("# Затем: python kd2_merge.py merge --out merged.xml --decisions %s\n\n"
                      % os.path.basename(decisions_path))
         for item in groups.get("need", []):
-            handle.write("# %s = mine   # %s\n" % (item.id, item.path.replace("/", " / ")))
+            decision = chosen.get(item.id)
+            if decision:
+                handle.write("%s = %s   # %s\n"
+                             % (item.id, decision, item.path.replace("/", " / ")))
+            else:
+                handle.write("# %s = mine   # %s\n" % (item.id, item.path.replace("/", " / ")))
+        # решения по блокам, которые больше не спорные, — сохраняем комментарием
+        stale = [(key, value) for key, value in chosen.items() if key not in need_ids]
+        if stale:
+            handle.write("\n# ранее решённые блоки (больше не спорные, сохранены для истории):\n")
+            for key, value in stale:
+                handle.write("# %s = %s\n" % (key, value))
     return groups
 
 
@@ -739,6 +757,11 @@ def write_output(path, lines, doc):
 
 
 def load_decisions(path):
+    """Читает файл решений. Строки вида «ID = mine   # комментарий».
+
+    Значение берётся до первого '#', так что путь-комментарий справа
+    не мешает распознаванию mine/develop.
+    """
     decisions = {}
     if not path or not os.path.exists(path):
         return decisions
@@ -750,7 +773,11 @@ def load_decisions(path):
             if "=" not in line:
                 continue
             key, value = line.split("=", 1)
-            decisions[key.strip()] = value.strip().lower()
+            value = value.split("#", 1)[0].strip().lower()
+            if value in ("mine", "my", "branch", "develop", "theirs", "keep"):
+                decisions[key.strip()] = value
+            else:
+                print("решения: строка пропущена (не понял значение): %s" % line[:100])
     return decisions
 
 
@@ -817,6 +844,10 @@ def main(argv=None):
         write_output(result, lines, merger.dev)
     groups = build_report(merger, args.report, args.decisions, result)
     summary(merger)
+    if merger.applied:
+        print("приняты решения из %s:" % os.path.basename(args.decisions))
+        for item_id, value in merger.applied:
+            print("  %s = %s" % (item_id, value))
     print("отчёт: %s" % args.report)
     print("решения: %s (спорных: %d)" % (args.decisions, len(groups.get("need") or [])))
     if result:

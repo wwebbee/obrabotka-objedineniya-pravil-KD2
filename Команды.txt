@@ -1,0 +1,5 @@
+python kd2_merge.py analyze --develop "ПравилаОбменаДанными_УТ-ERP (develop).xml" --mine "ПравилаОбменаДанными_УТ-ERP (изменения).xml"
+
+python kd2_merge.py merge --develop "ПравилаОбменаДанными_УТ-ERP (develop).xml" --mine "ПравилаОбменаДанными_УТ-ERP (изменения).xml" --out "ПравилаОбменаДанными_УТ-ERP (merged).xml"
+
+python kd2_merge.py merge --develop "ПравилаОбменаДанными_УПП-ERP (develop).xml" --mine "ПравилаОбменаДанными_УПП-ERP (изменения).xml" --out "ПравилаОбменаДанными_УПП-ERP (merged).xml"
